@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3490DC"
+    tools:context=".authentication.LoginSignupActivity">
+
+    <!--    start of alertify logo-->
+
+
+    <TextView
+        android:id="@+id/txt_alertify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/noto_serif_bold"
+        android:text="ALERTIFY"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
+
+
+    <!--    end of alertify logo-->
+
+
+    <!--    start of tabsLayout-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/txt_alertify"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/login_signup_shape">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/login_signup_shape"
+            app:tabIndicatorColor="#3490DC"
+            app:tabTextColor="#676767"
+            app:tabSelectedTextColor="#3490DC">
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tabs" />
+
+
+    </RelativeLayout>
+
+    <!--    end of tabsLayout-->
+
+</RelativeLayout>

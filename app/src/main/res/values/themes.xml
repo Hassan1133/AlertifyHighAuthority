@@ -1,0 +1,67 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.ALERTIFY_MAIN_ADMIN" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/app_color</item>
+        <item name="colorPrimaryVariant">@color/app_color</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/app_color</item>
+        <item name="colorSecondaryVariant">@color/app_color</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/app_color</item>
+
+        <!-- Customize your theme here. -->
+
+        <!--        disable white screen before splash screen-->
+        <item name="android:windowDisablePreview">true</item>
+
+    </style>
+
+    <!--style of profile header-->
+    <style name="user_name_email">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+<!--    style of police station recycler view layout-->
+    <style name="topCornerBorderRadius" parent="">
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerSizeTopLeft">10dp</item>
+        <item name="cornerSizeTopRight">10dp</item>
+    </style>
+
+    <!--    style of dep Admin image recycler view layout-->
+    <style name="dep_admin_img_corners" parent="">
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerSizeTopLeft">10dp</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerSizeBottomLeft">10dp</item>
+
+    </style>
+
+<!--    style of dep-admin img update dialog-->
+    <style name="dep_admin_update_img_corners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
+    </style>
+
+    <!--    style of navigation drawer-->
+    <style name="navigation_style">
+        <item name="android:background">@color/white</item>
+        <item name="iconTint">@color/black</item>
+        <item name="itemTextColor">@color/black</item>
+    </style>
+
+    <!--    style of search view-->
+    <style name="search_view_style">
+        <item name="android:textColorHint">#A5A4A4</item>
+        <item name="android:editTextColor">@color/black</item>
+        <item name="android:colorControlNormal">#707070</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_shape</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+
+</resources>

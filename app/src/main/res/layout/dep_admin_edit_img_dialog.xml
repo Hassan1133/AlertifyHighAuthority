@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/dep_admin_edit_dialog_shape"
+        >
+
+        <ImageView
+            android:id="@+id/dep_admin_img_close_btn"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/close"
+            />
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/dep_admin_dialog_image"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:scaleType="centerCrop"
+            app:shapeAppearance="@style/dep_admin_update_img_corners"
+            />
+
+        <ProgressBar
+            android:id="@+id/dep_admin_img_progressbar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/dep_admin_dialog_image"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:indeterminateTint="#3490DC"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/dep_admin_img_update_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:layout_below="@id/dep_admin_img_progressbar"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:backgroundTint="#3490DC"
+            android:text="update"
+            android:textColor="@color/white"
+             />
+
+    </RelativeLayout>
+
+</ScrollView>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Alertify</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="select_item">Select Police Station</string>
+</resources>
