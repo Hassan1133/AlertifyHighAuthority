@@ -17,17 +17,17 @@
         android:theme="@style/Theme.ALERTIFY_MAIN_ADMIN"
         tools:targetApi="31">
         <activity
-            android:name=".main_utils.EditUserProfileActivity"
+            android:name=".activities.EditUserProfileActivity"
             android:configChanges="orientation"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".dep_admin.EditDepAdminActivity"
+            android:name=".activities.EditDepAdminActivity"
             android:configChanges="orientation"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".police_station.EditPoliceStationActivity"
+            android:name=".activities.EditPoliceStationActivity"
             android:configChanges="orientation"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -37,23 +37,23 @@
             android:value="AIzaSyAeUk3zL2dPXtHNfqSAI7jJzPs-cqypRQk" />
 
         <activity
-            android:name=".main_utils.MapsActivity"
+            android:name=".activities.MapsActivity"
             android:configChanges="orientation"
             android:exported="false"
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".authentication.LoginSignupActivity"
+            android:name=".activities.LoginSignupActivity"
             android:configChanges="orientation"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".main_utils.MainActivity"
+            android:name=".activities.MainActivity"
             android:configChanges="orientation"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".splash_screen.SplashScreen"
+            android:name=".activities.SplashScreen"
             android:configChanges="orientation"
             android:exported="true"
             android:screenOrientation="portrait">

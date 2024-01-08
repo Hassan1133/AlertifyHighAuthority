@@ -1,4 +1,4 @@
-package com.example.alertify_main_admin.main_utils;
+package com.example.alertify_main_admin.activities;
 
 import static com.example.alertify_main_admin.constants.Constants.ERROR_DIALOG_REQUEST;
 import static com.example.alertify_main_admin.constants.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
@@ -30,10 +30,9 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.alertify_main_admin.R;
-import com.example.alertify_main_admin.authentication.LoginSignupActivity;
-import com.example.alertify_main_admin.complaints.Complaints_Fragment;
-import com.example.alertify_main_admin.dep_admin.Dep_Admin_Fragment;
-import com.example.alertify_main_admin.police_station.PoliceStationFragment;
+import com.example.alertify_main_admin.fragments.Complaints_Fragment;
+import com.example.alertify_main_admin.fragments.Dep_Admin_Fragment;
+import com.example.alertify_main_admin.fragments.PoliceStationFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

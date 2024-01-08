@@ -1,4 +1,4 @@
-package com.example.alertify_main_admin.police_station;
+package com.example.alertify_main_admin.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -29,9 +29,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.alertify_main_admin.R;
-import com.example.alertify_main_admin.adapter.PoliceStationAdp;
-import com.example.alertify_main_admin.main_utils.MapsActivity;
+import com.example.alertify_main_admin.adapters.PoliceStationAdp;
+import com.example.alertify_main_admin.activities.MapsActivity;
 import com.example.alertify_main_admin.main_utils.NetworkUtils;
+import com.example.alertify_main_admin.model.PoliceStationModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

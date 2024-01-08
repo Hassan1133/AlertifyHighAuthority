@@ -1,4 +1,4 @@
-package com.example.alertify_main_admin.authentication;
+package com.example.alertify_main_admin.fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -25,7 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.alertify_main_admin.R;
-import com.example.alertify_main_admin.main_utils.MainActivity;
+import com.example.alertify_main_admin.activities.MainActivity;
 import com.example.alertify_main_admin.model.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

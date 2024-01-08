@@ -1,4 +1,4 @@
-package com.example.alertify_main_admin.adapter;
+package com.example.alertify_main_admin.adapters;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;

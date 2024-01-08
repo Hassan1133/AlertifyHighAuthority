@@ -1,4 +1,4 @@
-package com.example.alertify_main_admin.adapter;
+package com.example.alertify_main_admin.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.model.DepAdminModel;
-import com.example.alertify_main_admin.dep_admin.EditDepAdminActivity;
+import com.example.alertify_main_admin.activities.EditDepAdminActivity;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.List;

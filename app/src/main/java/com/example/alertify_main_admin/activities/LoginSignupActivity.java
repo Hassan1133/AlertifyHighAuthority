@@ -1,12 +1,14 @@
-package com.example.alertify_main_admin.authentication;
+package com.example.alertify_main_admin.activities;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.alertify_main_admin.adapter.ViewPagerAdapter;
+import com.example.alertify_main_admin.adapters.ViewPagerAdapter;
 import com.example.alertify_main_admin.R;
+import com.example.alertify_main_admin.fragments.LoginFragment;
+import com.example.alertify_main_admin.fragments.SignupFragment;
 import com.google.android.material.tabs.TabLayout;
 
 public class LoginSignupActivity extends AppCompatActivity {

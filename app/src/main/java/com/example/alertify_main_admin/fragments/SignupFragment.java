@@ -1,4 +1,4 @@
-package com.example.alertify_main_admin.authentication;
+package com.example.alertify_main_admin.fragments;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -26,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.alertify_main_admin.R;
+import com.example.alertify_main_admin.activities.LoginSignupActivity;
 import com.example.alertify_main_admin.model.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

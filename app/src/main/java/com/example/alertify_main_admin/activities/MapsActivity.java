@@ -1,4 +1,4 @@
-package com.example.alertify_main_admin.main_utils;
+package com.example.alertify_main_admin.activities;
 
 import android.Manifest;
 import android.app.Activity;

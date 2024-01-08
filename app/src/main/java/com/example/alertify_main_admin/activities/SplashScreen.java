@@ -1,4 +1,4 @@
-package com.example.alertify_main_admin.splash_screen;
+package com.example.alertify_main_admin.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,9 +9,7 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import com.example.alertify_main_admin.main_utils.MainActivity;
 import com.example.alertify_main_admin.R;
-import com.example.alertify_main_admin.authentication.LoginSignupActivity;
 
 
 public class SplashScreen extends AppCompatActivity {
