@@ -29,10 +29,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.alertify_main_admin.R;
+import com.example.alertify_main_admin.activities.PoliceStationBoundaryMapsActivity;
 import com.example.alertify_main_admin.adapters.PoliceStationAdp;
 import com.example.alertify_main_admin.activities.MapsActivity;
+import com.example.alertify_main_admin.databinding.PoliceStationBinding;
 import com.example.alertify_main_admin.main_utils.NetworkUtils;
-import com.example.alertify_main_admin.model.PoliceStationModel;
+import com.example.alertify_main_admin.models.PoliceStationModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -52,7 +54,7 @@ import java.util.List;
 
 public class PoliceStationFragment extends Fragment implements View.OnClickListener {
 
-    private FloatingActionButton addPoliceStationBtn;
+    private PoliceStationBinding binding;
 
     private EditText policeStationName, policeStationLocation, policeStationNumber;
 
@@ -70,32 +72,29 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
 
     private StorageReference firebaseStorageReference;
 
-    private RecyclerView recyclerView;
-
     private List<PoliceStationModel> policeStations;
 
     private PoliceStationAdp adp;
 
-    private ProgressBar dialogProgressBar, fragmentProgressBar;
+    private ProgressBar dialogProgressBar;
 
     private String randomId;
-
-    private SearchView searchView;
 
     private String imageSize;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.police_station, container, false);
-        init(view);
+        binding = PoliceStationBinding.inflate(inflater, container, false);
+
+        init();
         fetchData();
-        return view;
+        return binding.getRoot();
+
     }
 
-    private void init(View view) {
-        addPoliceStationBtn = view.findViewById(R.id.addBtn);
-        addPoliceStationBtn.setOnClickListener(this);
+    private void init() {
+        binding.addBtn.setOnClickListener(this);
 
         firebaseReference = FirebaseDatabase.getInstance().getReference("AlertifyPoliceStations"); // firebase initialization
 
@@ -103,28 +102,19 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
 
         policeStations = new ArrayList<PoliceStationModel>();
 
-        recyclerView = view.findViewById(R.id.policeStationRecycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.policeStationRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.policeStationSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
-        fragmentProgressBar = view.findViewById(R.id.progressbar);
-
-        searchView = view.findViewById(R.id.search_view);
-        if (searchView != null) {
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    search(newText);
-                    return true;
-                }
-            });
-
-        }
-
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                search(newText);
+                return true;
+            }
+        });
     }
 
     private void search(String newText) {
@@ -135,7 +125,7 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
             }
         }
         adp = new PoliceStationAdp(getActivity(), searchList);
-        recyclerView.setAdapter(adp);
+        binding.policeStationRecycler.setAdapter(adp);
     }
 
     @Override
@@ -147,12 +137,13 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
                     createDialog();
                 } else {
                     // Internet is not available, show a message to the user
-                    Toast.makeText(getActivity(), "Please turn on your internet.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Check your internet connection", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
     }
 
+//    this method for create add police station dialog
     private void createDialog() {
         dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.police_station_dialog);
@@ -175,10 +166,17 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MapsActivity.class);
-                mapsActivityResultLauncher.launch(intent);
+                policeStationLocationResultLauncher.launch(intent);
             }
         });
 
+        dialog.findViewById(R.id.add_boundary).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), PoliceStationBoundaryMapsActivity.class);
+                policeStationBoundaryResultLauncher.launch(intent);
+            }
+        });
         dialog.findViewById(R.id.okBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -385,7 +383,7 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
 
     private void fetchData() {
 
-        fragmentProgressBar.setVisibility(View.VISIBLE);
+        binding.progressbar.setVisibility(View.VISIBLE);
 
         firebaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -397,7 +395,7 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
                     policeStations.add(dataSnapshot.getValue(PoliceStationModel.class));
                 }
 
-                fragmentProgressBar.setVisibility(View.INVISIBLE);
+                binding.progressbar.setVisibility(View.INVISIBLE);
 
                 setDataToRecycler(policeStations);
 
@@ -412,17 +410,26 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
 
     private void setDataToRecycler(List<PoliceStationModel> policeStations) {
         adp = new PoliceStationAdp(getActivity(), policeStations);
-        recyclerView.setAdapter(adp);
+        binding.policeStationRecycler.setAdapter(adp);
     }
 
 
-    private ActivityResultLauncher<Intent> mapsActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+    private ActivityResultLauncher<Intent> policeStationLocationResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
                 policeStationLocation.setText(result.getData().getStringExtra("address"));
                 selectedLatitude = result.getData().getDoubleExtra("latitude", 0);
                 selectedLongitude = result.getData().getDoubleExtra("longitude", 0);
+            }
+        }
+    });
+
+    private ActivityResultLauncher<Intent> policeStationBoundaryResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+
             }
         }
     });

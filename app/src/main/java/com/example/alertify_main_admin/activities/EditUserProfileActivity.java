@@ -25,7 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.alertify_main_admin.R;
-import com.example.alertify_main_admin.model.UserModel;
+import com.example.alertify_main_admin.models.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

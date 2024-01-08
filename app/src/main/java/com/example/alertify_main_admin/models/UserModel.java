@@ -1,4 +1,4 @@
-package com.example.alertify_main_admin.model;
+package com.example.alertify_main_admin.models;
 
 import java.io.Serializable;
 

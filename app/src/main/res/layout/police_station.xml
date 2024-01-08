@@ -5,7 +5,7 @@
     android:background="@color/white">
 
     <SearchView
-        android:id="@+id/search_view"
+        android:id="@+id/policeStationSearchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
@@ -20,7 +20,7 @@
         android:id="@+id/policeStationRecycler"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/search_view" />
+        android:layout_below="@+id/policeStationSearchView" />
 
     <ProgressBar
         android:id="@+id/progressbar"

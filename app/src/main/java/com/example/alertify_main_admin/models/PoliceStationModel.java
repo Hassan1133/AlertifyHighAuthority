@@ -1,6 +1,9 @@
-package com.example.alertify_main_admin.model;
+package com.example.alertify_main_admin.models;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class PoliceStationModel implements Serializable {
     private String id;
@@ -11,6 +14,8 @@ public class PoliceStationModel implements Serializable {
 
     private String policeStationNumber;
     private String imgUrl;
+
+    private List<LatLng> boundaries; // List of LatLng for boundaries
 
     public String getPoliceStationNumber() {
         return policeStationNumber;
@@ -66,6 +71,13 @@ public class PoliceStationModel implements Serializable {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public List<LatLng> getBoundaries() {
+        return boundaries;
+    }
+    public void setBoundaries(List<LatLng> boundaries) {
+        this.boundaries = boundaries;
     }
 
 }

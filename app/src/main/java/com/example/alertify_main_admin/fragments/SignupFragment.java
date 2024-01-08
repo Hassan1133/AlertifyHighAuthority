@@ -27,7 +27,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.activities.LoginSignupActivity;
-import com.example.alertify_main_admin.model.UserModel;
+import com.example.alertify_main_admin.models.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

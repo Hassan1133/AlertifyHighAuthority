@@ -2,4 +2,15 @@
     <string name="app_name">Alertify</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="select_item">Select Police Station</string>
+    <string name="name">Name :</string>
+    <string name="location">Location :</string>
+    <string name="cancel">cancel</string>
+    <string name="ok">ok</string>
+    <string name="boundary">Boundary :</string>
+    <string name="police_station_no">Police Station No :</string>
+    <string name="police_station_location">police station\'s location</string>
+    <string name="police_station_name_hint">enter police station name</string>
+    <string name="police_station_no_hint">enter police station number</string>
+    <string name="title_activity_police_station_boundary_maps">PoliceStationBoundaryMapsActivity
+    </string>
 </resources>

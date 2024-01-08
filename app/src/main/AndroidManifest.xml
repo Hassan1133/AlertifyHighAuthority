@@ -16,6 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ALERTIFY_MAIN_ADMIN"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCoDtci5S11xJfMTs4zIJvBoytoIKnfn_Y" />
+
+        <activity
+            android:name=".activities.PoliceStationBoundaryMapsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_police_station_boundary_maps" />
         <activity
             android:name=".activities.EditUserProfileActivity"
             android:configChanges="orientation"
@@ -31,11 +40,6 @@
             android:configChanges="orientation"
             android:exported="false"
             android:screenOrientation="portrait" />
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAeUk3zL2dPXtHNfqSAI7jJzPs-cqypRQk" />
-
         <activity
             android:name=".activities.MapsActivity"
             android:configChanges="orientation"
