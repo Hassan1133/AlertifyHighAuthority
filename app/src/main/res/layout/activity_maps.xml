@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,16 +14,15 @@
         android:layout_height="match_parent"
      />
     
-    <SearchView
-        android:id="@+id/search_view"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/mapsSearchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="18dp"
         android:elevation="5dp"
-        android:iconifiedByDefault="false"
         android:theme="@style/search_view_style"
-        android:queryBackground="@null"
-        android:queryHint="Search..."
+        app:iconifiedByDefault="false"
+        app:queryHint="@string/search"
         android:background="@drawable/search_view"
         />
 

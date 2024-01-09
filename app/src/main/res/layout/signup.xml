@@ -29,7 +29,7 @@
                 android:src="@drawable/dp" />
 
             <ImageView
-                android:id="@+id/pick_img_icon"
+                android:id="@+id/pickImgIcon"
                 android:layout_width="23sp"
                 android:layout_height="23sp"
                 android:layout_alignRight="@+id/image"
@@ -201,7 +201,7 @@
         <!--        start of signup button-->
 
         <Button
-            android:id="@+id/signup_btn"
+            android:id="@+id/signupBtn"
             android:layout_width="match_parent"
             android:layout_height="50sp"
             android:layout_below="@id/password_layout"

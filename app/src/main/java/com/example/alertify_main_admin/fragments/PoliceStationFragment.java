@@ -35,6 +35,9 @@ import com.example.alertify_main_admin.adapters.DepAdminAdp;
 import com.example.alertify_main_admin.adapters.PoliceStationAdp;
 import com.example.alertify_main_admin.activities.MapsActivity;
 import com.example.alertify_main_admin.databinding.PoliceStationBinding;
+import com.example.alertify_main_admin.databinding.PoliceStationDialogBinding;
+import com.example.alertify_main_admin.main_utils.LatLngWrapper;
+import com.example.alertify_main_admin.main_utils.LoadingDialog;
 import com.example.alertify_main_admin.main_utils.NetworkUtils;
 import com.example.alertify_main_admin.models.DepAdminModel;
 import com.example.alertify_main_admin.models.PoliceStationModel;
@@ -59,18 +62,12 @@ import java.util.List;
 public class PoliceStationFragment extends Fragment implements View.OnClickListener {
 
     private PoliceStationBinding binding;
-
-    private EditText policeStationName, policeStationLocation, policeStationNumber;
-
     private double selectedLatitude, selectedLongitude;
-
     private Dialog dialog;
 
     private PoliceStationModel policeStation;
 
     private DatabaseReference firebaseReference;
-
-    private ImageView police_station_img;
 
     private Uri imageUri;
 
@@ -79,27 +76,23 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
     private List<PoliceStationModel> policeStations;
 
     private PoliceStationAdp adp;
-
-    private ProgressBar dialogProgressBar;
-
     private String randomId;
 
     private String imageSize;
 
-    private List<LatLng> boundaryPoints;
+    private List<LatLngWrapper> boundaryPoints;
 
     private BoundaryAdapter boundaryAdp;
-    private RecyclerView boundaryRecycler;
+
+    private PoliceStationDialogBinding policeStationDialogBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = PoliceStationBinding.inflate(inflater, container, false);
-
         init();
         fetchData();
         return binding.getRoot();
-
     }
 
     private void init() {
@@ -111,8 +104,10 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
 
         policeStations = new ArrayList<PoliceStationModel>();
 
+        boundaryPoints = new ArrayList<LatLngWrapper>();
+
         binding.policeStationRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.policeStationSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        binding.policeStationSearchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -154,26 +149,20 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
 
     //    this method for create add police station dialog
     private void createDialog() {
+        policeStationDialogBinding = PoliceStationDialogBinding.inflate(LayoutInflater.from(getActivity()));
         dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.police_station_dialog);
+        dialog.setContentView(policeStationDialogBinding.getRoot());
         dialog.show();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        policeStationDialogBinding.boundariesRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        policeStationName = dialog.findViewById(R.id.police_station_name);
-        policeStationNumber = dialog.findViewById(R.id.police_station_number);
-        policeStationLocation = dialog.findViewById(R.id.police_station_location);
-        police_station_img = dialog.findViewById(R.id.police_station_img);
-        dialogProgressBar = dialog.findViewById(R.id.progressbar);
-        boundaryRecycler = dialog.findViewById(R.id.boundariesRecycler);
-        boundaryRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        police_station_img.setOnClickListener(new View.OnClickListener() {
+        policeStationDialogBinding.dialogPoliceStationImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pickImage();
             }
         });
-        dialog.findViewById(R.id.add_location).setOnClickListener(new View.OnClickListener() {
+        policeStationDialogBinding.dialogAddPoliceStationLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MapsActivity.class);
@@ -181,35 +170,35 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
             }
         });
 
-        dialog.findViewById(R.id.add_boundary).setOnClickListener(new View.OnClickListener() {
+        policeStationDialogBinding.dialogAddPoliceStationBoundaryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), PoliceStationBoundaryMapsActivity.class);
                 policeStationBoundaryResultLauncher.launch(intent);
             }
         });
-        dialog.findViewById(R.id.okBtn).setOnClickListener(new View.OnClickListener() {
+        policeStationDialogBinding.okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (isValid()) {
-                    dialogProgressBar.setVisibility(View.VISIBLE);
+                    LoadingDialog.showLoadingDialog(getActivity());
 
                     policeStation = new PoliceStationModel();
 
-                    policeStation.setPoliceStationName(policeStationName.getText().toString());
-                    policeStation.setPoliceStationNumber(policeStationNumber.getText().toString());
-                    policeStation.setPoliceStationLocation(policeStationLocation.getText().toString());
+                    policeStation.setPoliceStationName(policeStationDialogBinding.dialogPoliceStationName.getText().toString());
+                    policeStation.setPoliceStationNumber(policeStationDialogBinding.dialogPoliceStationNumber.getText().toString());
+                    policeStation.setPoliceStationLocation(policeStationDialogBinding.dialogPoliceStationLocation.getText().toString());
                     policeStation.setPoliceStationLatitude(selectedLatitude);
                     policeStation.setPoliceStationLongitude(selectedLongitude);
+                    policeStation.setBoundaries(boundaryPoints);
 
                     checkPoliceStationExists(policeStation.getPoliceStationNumber());
-
                 }
             }
         });
 
-        dialog.findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
+        policeStationDialogBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -234,10 +223,10 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
                         count++;
 
                         if (ps.getPoliceStationNumber().toLowerCase().trim().equals(number.toLowerCase().trim())) {
-                            policeStationNumber.setText("");
+                            policeStationDialogBinding.dialogPoliceStationNumber.setText("");
                             Toast.makeText(getActivity(), "Police Station number already exists. Please enter a different one", Toast.LENGTH_SHORT).show();
-                            policeStationNumber.setError("Police Station number already exists. Please enter a different one");
-                            dialogProgressBar.setVisibility(View.INVISIBLE);
+                            policeStationDialogBinding.dialogPoliceStationNumber.setError("Police Station number already exists. Please enter a different one");
+                            LoadingDialog.hideLoadingDialog();
                             check = true;
                             return;
                         } else if (count == snapshot.getChildrenCount()) {
@@ -303,7 +292,7 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
             if (uri != null) {
                 if (isImageSizeValid(uri)) {
                     imageUri = uri;
-                    police_station_img.setImageURI(imageUri);
+                    policeStationDialogBinding.dialogPoliceStationImg.setImageURI(imageUri);
                 } else {
                     Toast.makeText(getActivity(), imageSize + ". Please select an image smaller than 2 MB", Toast.LENGTH_SHORT).show();
                 }
@@ -350,7 +339,7 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    dialogProgressBar.setVisibility(View.INVISIBLE);
+                    LoadingDialog.hideLoadingDialog();
                     Toast.makeText(getActivity(), "Police Station added successfully!", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
@@ -372,16 +361,16 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
             valid = false;
         }
 
-        if (policeStationName.getText().length() < 3) {
-            policeStationName.setError("Please enter valid name");
+        if (policeStationDialogBinding.dialogPoliceStationName.getText().length() < 3) {
+            policeStationDialogBinding.dialogPoliceStationName.setError("Please enter valid name");
             valid = false;
         }
-        if (policeStationNumber.getText().length() == 0) {
-            policeStationNumber.setError("Please enter valid number");
+        if (policeStationDialogBinding.dialogPoliceStationNumber.getText().length() == 0) {
+            policeStationDialogBinding.dialogPoliceStationNumber.setError("Please enter valid number");
             valid = false;
         }
-        if (policeStationLocation.getText().length() < 3) {
-            policeStationLocation.setError("Please select valid location");
+        if (policeStationDialogBinding.dialogPoliceStationLocation.getText().length() < 3) {
+            policeStationDialogBinding.dialogPoliceStationLocation.setError("Please select valid location");
             valid = false;
         }
         if (selectedLatitude == 0 || selectedLongitude == 0) {
@@ -389,12 +378,16 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
             valid = false;
         }
 
+        if (boundaryPoints.isEmpty()) {
+            Toast.makeText(getActivity(), "Please add boundary points", Toast.LENGTH_SHORT).show();
+            valid = false;
+        }
         return valid;
     }
 
     private void fetchData() {
 
-        binding.progressbar.setVisibility(View.VISIBLE);
+        LoadingDialog.showLoadingDialog(getActivity());
 
         firebaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -406,7 +399,7 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
                     policeStations.add(dataSnapshot.getValue(PoliceStationModel.class));
                 }
 
-                binding.progressbar.setVisibility(View.INVISIBLE);
+                LoadingDialog.hideLoadingDialog();
 
                 setDataToRecycler(policeStations);
 
@@ -429,7 +422,7 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
-                policeStationLocation.setText(result.getData().getStringExtra("address"));
+                policeStationDialogBinding.dialogPoliceStationLocation.setText(result.getData().getStringExtra("address"));
                 selectedLatitude = result.getData().getDoubleExtra("latitude", 0);
                 selectedLongitude = result.getData().getDoubleExtra("longitude", 0);
             }
@@ -440,14 +433,14 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
-                boundaryPoints = (List<LatLng>) result.getData().getSerializableExtra("latLngList");
+                boundaryPoints = (List<LatLngWrapper>) result.getData().getSerializableExtra("latLngList");
                 setDataToBoundaryRecycler(boundaryPoints);
             }
         }
     });
 
-    private void setDataToBoundaryRecycler(List<LatLng> boundaryList) {
+    private void setDataToBoundaryRecycler(List<LatLngWrapper> boundaryList) {
         boundaryAdp = new BoundaryAdapter(getActivity(), boundaryList);
-        boundaryRecycler.setAdapter(boundaryAdp);
+        policeStationDialogBinding.boundariesRecycler.setAdapter(boundaryAdp);
     }
 }

@@ -10,75 +10,47 @@
         android:background="@drawable/dep_admin_edit_dialog_shape">
 
         <ImageView
-            android:id="@+id/userProfilePasswordDialogCloseBtn"
+            android:id="@+id/userEditNameDialogCloseBtn"
             android:layout_width="20sp"
             android:layout_height="20sp"
             android:layout_alignParentEnd="true"
             android:src="@drawable/close" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/user_current_password_layout"
+            android:id="@+id/dep_admin_dialog_name_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/userProfilePasswordDialogCloseBtn"
+            android:layout_below="@+id/userEditNameDialogCloseBtn"
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="20dp"
-            android:hint="@string/current_password"
+            android:hint="@string/user_name_hint"
             android:textColorHint="@color/hint_clr"
             app:boxStrokeColor="@color/hint_clr"
-            app:endIconMode="password_toggle"
-            app:endIconTint="@color/hint_clr"
             app:hintTextColor="@color/hint_clr">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/userCurrentPassword"
+                android:id="@+id/userDialogName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textCursorDrawable="@drawable/cursor_shape"
                 android:textColor="@color/hint_clr"
-                android:textSize="15sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/user_new_password_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/user_current_password_layout"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:hint="@string/new_password"
-            android:textColorHint="@color/hint_clr"
-            app:boxStrokeColor="@color/hint_clr"
-            app:endIconMode="password_toggle"
-            app:endIconTint="@color/hint_clr"
-            app:hintTextColor="@color/hint_clr">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/userNewPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:textCursorDrawable="@drawable/cursor_shape"
-                android:textColor="@color/hint_clr"
                 android:textSize="15sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/userProfilePasswordDialogUpdateBtn"
+            android:id="@+id/userEditNameDialogUpdateBtn"
             android:layout_width="match_parent"
             android:layout_height="50sp"
-            android:layout_below="@id/user_new_password_layout"
+            android:layout_below="@id/dep_admin_dialog_name_layout"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:backgroundTint="@color/app_color"
-            android:textAllCaps="false"
             android:text="@string/update"
+            android:textAllCaps="false"
             android:textColor="@color/white" />
 
     </RelativeLayout>

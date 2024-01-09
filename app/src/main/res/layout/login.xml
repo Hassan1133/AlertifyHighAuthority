@@ -131,7 +131,7 @@
         <!--        start of login button-->
 
         <Button
-            android:id="@+id/login_btn"
+            android:id="@+id/loginBtn"
             android:layout_width="match_parent"
             android:layout_height="50sp"
             android:layout_below="@id/password_layout"

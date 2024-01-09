@@ -58,4 +58,7 @@ dependencies {
 
     // maps utils
     implementation 'com.google.maps.android:android-maps-utils:2.2.0'
+
+    //    clk progress library
+    implementation 'com.github.colakcode:clkProgress:v1.0'
 }

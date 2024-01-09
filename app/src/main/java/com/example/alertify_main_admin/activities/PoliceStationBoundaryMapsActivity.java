@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.databinding.ActivityMapsBinding;
+import com.example.alertify_main_admin.main_utils.LatLngWrapper;
 import com.example.alertify_main_admin.main_utils.NetworkUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,7 +44,7 @@ public class PoliceStationBoundaryMapsActivity extends FragmentActivity implemen
     private Geocoder geocoder;
     private SupportMapFragment mapFragment;
 
-    private List<LatLng> polygonPoints;
+    private List<LatLngWrapper> polygonPoints;
     private PolygonOptions polygonOptions;
 
     @Override
@@ -91,7 +92,7 @@ public class PoliceStationBoundaryMapsActivity extends FragmentActivity implemen
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng point) {
-                polygonPoints.add(point);
+                polygonPoints.add(new LatLngWrapper(point.latitude, point.longitude));
                 googleMap.addMarker(new MarkerOptions().position(point));
             }
         });
@@ -110,10 +111,9 @@ public class PoliceStationBoundaryMapsActivity extends FragmentActivity implemen
     }
 
     private void searchLocation() {
-        binding.boundaryMapSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        binding.boundaryMapSearchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
                 if (NetworkUtils.isInternetAvailable(PoliceStationBoundaryMapsActivity.this)) {
                     String location = binding.boundaryMapSearchView.getQuery().toString();
                     List<Address> addressList = null;
@@ -149,6 +149,7 @@ public class PoliceStationBoundaryMapsActivity extends FragmentActivity implemen
                 return false;
             }
         });
+
     }
 
     private void drawPolygon() {
@@ -156,8 +157,8 @@ public class PoliceStationBoundaryMapsActivity extends FragmentActivity implemen
             googleMap.clear();  // Clear existing markers and shapes
             polygonOptions = new PolygonOptions();
 
-            for (LatLng point : polygonPoints) {
-                polygonOptions.add(point);
+            for (LatLngWrapper point : polygonPoints) {
+                polygonOptions.add(new LatLng(point.getLatitude(), point.getLongitude()));
             }
             googleMap.addPolygon(polygonOptions);
 
@@ -167,15 +168,12 @@ public class PoliceStationBoundaryMapsActivity extends FragmentActivity implemen
     }
 
     private void sendBoundaryPointsToPoliceStationDialog() {
-        if(!polygonPoints.isEmpty())
-        {
+        if (!polygonPoints.isEmpty()) {
             Intent returnIntent = new Intent();
             returnIntent.putExtra("latLngList", (Serializable) polygonPoints);
             setResult(Activity.RESULT_OK, returnIntent);
             finish();
-        }
-        else
-        {
+        } else {
             Toast.makeText(this, "Please select boundary points", Toast.LENGTH_SHORT).show();
         }
     }

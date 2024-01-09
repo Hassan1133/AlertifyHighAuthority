@@ -26,6 +26,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.activities.MainActivity;
+import com.example.alertify_main_admin.databinding.LoginBinding;
+import com.example.alertify_main_admin.databinding.PoliceStationBinding;
+import com.example.alertify_main_admin.main_utils.LoadingDialog;
 import com.example.alertify_main_admin.models.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,33 +44,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
-
-    private TextInputEditText email, password;
-
-    private Button loginBtn;
-
     private FirebaseAuth firebaseAuth;
-
-    private ProgressBar loadingProgressBar;
-
     private DatabaseReference databaseReference;
-
-    private Dialog loadingDialog;
+    private LoginBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.login, container, false);
-        init(view);
-        return view;
+        binding = LoginBinding.inflate(inflater, container, false);
+        init();
+        return binding.getRoot();
     }
 
-    private void init(View view) {
-        email = view.findViewById(R.id.email);
-        password = view.findViewById(R.id.password);
-
-        loginBtn = view.findViewById(R.id.login_btn);
-        loginBtn.setOnClickListener(this);
+    private void init() {
+        binding.loginBtn.setOnClickListener(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -78,45 +68,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.login_btn:
+            case R.id.loginBtn:
                 if (isValid()) {
-                    createLoadingDialog();
+                    LoadingDialog.showLoadingDialog(getActivity());
                     signIn();
                 }
                 break;
         }
     }
 
-    private void createLoadingDialog() {
-        loadingDialog = new Dialog(getActivity());
-        loadingDialog.setContentView(R.layout.profile_loading_dialog);
-        loadingDialog.show();
-        loadingDialog.setCancelable(false);
-        loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        TextView loadingTxt = loadingDialog.findViewById(R.id.loading);
-        loadingTxt.setText("Signing in....");
-
-        loadingProgressBar = loadingDialog.findViewById(R.id.profile_progressbar);
-
-        loadingProgressBar.setVisibility(View.VISIBLE);
-
-        loadingDialog.setOnKeyListener(new Dialog.OnKeyListener() {
-
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                    dialog.dismiss();
-                    getActivity().finish();
-                }
-                return true;
-            }
-        });
-    }
-
-
     private void signIn() {
-        firebaseAuth.signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseAuth.signInWithEmailAndPassword(binding.email.getText().toString().trim(), binding.password.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -127,7 +89,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                loadingDialog.dismiss();
+                LoadingDialog.hideLoadingDialog();
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     Toast.makeText(getContext(), "The Password is wrong", Toast.LENGTH_SHORT).show();
                 } else {
@@ -141,12 +103,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     {
         boolean valid = true;
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(email.getText()).matches()) {
-            email.setError("enter valid email");
+        if (!Patterns.EMAIL_ADDRESS.matcher(binding.email.getText()).matches()) {
+            binding.email.setError("enter valid email");
             valid = false;
         }
-        if (password.getText().length() < 6) {
-            password.setError("enter valid name");
+        if (binding.password.getText().length() < 6) {
+            binding.password.setError("enter valid name");
             valid = false;
         }
 
@@ -171,13 +133,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         editor.putString("userEmail", user.getEmail());
                         editor.putString("userImgUrl", user.getImgUrl());
                         editor.apply();
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         System.out.println(e);
                     }
 
-                    loadingDialog.dismiss();
+                    LoadingDialog.hideLoadingDialog();
                     Toast.makeText(getContext(), "Logged in Successfully", Toast.LENGTH_SHORT).show();
                     goToMainActivity();
 

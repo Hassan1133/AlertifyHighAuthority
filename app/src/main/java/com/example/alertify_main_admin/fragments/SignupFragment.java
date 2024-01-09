@@ -27,6 +27,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.activities.LoginSignupActivity;
+import com.example.alertify_main_admin.databinding.SignupBinding;
+import com.example.alertify_main_admin.main_utils.LoadingDialog;
 import com.example.alertify_main_admin.models.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,13 +45,6 @@ import com.google.firebase.storage.UploadTask;
 
 public class SignupFragment extends Fragment implements View.OnClickListener {
 
-    private ImageView pick_img_icon, userImg;
-
-    private TextInputEditText name, email, password;
-
-    private Button signupBtn;
-
-    private ProgressBar loadingProgressBar;
     private Uri imageUri;
 
     private UserModel user;
@@ -60,32 +55,22 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
 
     private DatabaseReference firebaseDatabaseReference;
 
-    private Dialog loadingDialog;
-
     private String imageSize;
+
+    private SignupBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.signup, container, false);
-        init(view);
-        return view;
-
+        binding = SignupBinding.inflate(inflater, container, false);
+        init();
+        return binding.getRoot();
     }
 
-    private void init(@NonNull View view) // method for widgets or variables initialization
+    private void init() // method for widgets or variables initialization
     {
-        pick_img_icon = view.findViewById(R.id.pick_img_icon);
-        pick_img_icon.setOnClickListener(this);
-
-        name = view.findViewById(R.id.name);
-        email = view.findViewById(R.id.email);
-        password = view.findViewById(R.id.password);
-
-        signupBtn = view.findViewById(R.id.signup_btn);
-        signupBtn.setOnClickListener(this);
-
-        userImg = view.findViewById(R.id.image);
+        binding.pickImgIcon.setOnClickListener(this);
+        binding.signupBtn.setOnClickListener(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -97,44 +82,25 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(@NonNull View v) {
         switch (v.getId()) {
-            case R.id.pick_img_icon:
+            case R.id.pickImgIcon:
 
                 chooseImage();
                 break;
 
-            case R.id.signup_btn:
+            case R.id.signupBtn:
                 createAccount();
                 break;
         }
     }
-
-
-    private void createLoadingDialog() {
-        loadingDialog = new Dialog(getActivity());
-        loadingDialog.setContentView(R.layout.profile_loading_dialog);
-        loadingDialog.show();
-        loadingDialog.setCancelable(false);
-        loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        TextView loadingTxt = loadingDialog.findViewById(R.id.loading);
-        loadingTxt.setText("Signing up....");
-
-        loadingProgressBar = loadingDialog.findViewById(R.id.profile_progressbar);
-
-        loadingProgressBar.setVisibility(View.VISIBLE);
-    }
-
     private void createAccount() // method for create account
     {
         if (isValid()) {
-
-            createLoadingDialog();
-
+            LoadingDialog.showLoadingDialog(getActivity());
             user = new UserModel();
-            user.setName(name.getText().toString().trim());
-            user.setEmail(email.getText().toString().trim());
+            user.setName(binding.name.getText().toString().trim());
+            user.setEmail(binding.email.getText().toString().trim());
 
-            firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), password.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), binding.password.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
@@ -145,8 +111,8 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    email.setText("");
-                    loadingDialog.dismiss();
+                    binding.email.setText("");
+                    LoadingDialog.hideLoadingDialog();
                     Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
@@ -176,8 +142,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        loadingDialog.dismiss();
-
+                        LoadingDialog.hideLoadingDialog();
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -198,7 +163,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    loadingDialog.dismiss();
+                    LoadingDialog.hideLoadingDialog();
                     Toast.makeText(getContext(), "Signed up Successfully", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), LoginSignupActivity.class);
                     startActivity(intent);
@@ -208,7 +173,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                loadingDialog.dismiss();
+                LoadingDialog.hideLoadingDialog();
                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -223,16 +188,16 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
             valid = false;
         }
 
-        if (name.getText().length() < 3) {
-            name.setError("enter valid name");
+        if (binding.name.getText().length() < 3) {
+            binding.name.setError("enter valid name");
             valid = false;
         }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email.getText()).matches()) {
-            email.setError("enter valid email");
+        if (!Patterns.EMAIL_ADDRESS.matcher(binding.email.getText()).matches()) {
+            binding.email.setError("enter valid email");
             valid = false;
         }
-        if (password.getText().length() < 6) {
-            password.setError("enter valid password");
+        if (binding.password.getText().length() < 6) {
+            binding.password.setError("enter valid password");
             valid = false;
         }
 
@@ -251,7 +216,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
 
                 if (isImageSizeValid(uri)) {
                     imageUri = uri;
-                    userImg.setImageURI(imageUri);
+                    binding.image.setImageURI(imageUri);
                 } else {
                     Toast.makeText(getActivity(), imageSize + ". Please select an image smaller than 2 MB", Toast.LENGTH_SHORT).show();
                 }

@@ -35,9 +35,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap googleMap;
     private ActivityMapsBinding binding;
-
-    private SearchView searchView;
-
     private Geocoder geocoder;
 
     private String selectedAddress;
@@ -55,7 +52,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        init();
         searchLocation();
     }
 
@@ -92,18 +88,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         layoutParams.setMargins(0, 0, 0, 20);
     }
-
-    private void init() {
-        searchView = findViewById(R.id.search_view);
-    }
-
     private void searchLocation() {
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        binding.mapsSearchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
                 if (checkConnection()) {
-                    String location = searchView.getQuery().toString();
+                    String location = binding.mapsSearchView.getQuery().toString();
                     List<Address> addressList = null;
 
                     if (!location.isEmpty()) {

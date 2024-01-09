@@ -1,7 +1,6 @@
 package com.example.alertify_main_admin.activities;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -9,12 +8,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -25,13 +21,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.alertify_main_admin.R;
+import com.example.alertify_main_admin.databinding.ActivityEditUserProfileBinding;
+import com.example.alertify_main_admin.databinding.UserEditPasswordDialogBinding;
+import com.example.alertify_main_admin.databinding.UserEditNameDialogBinding;
+import com.example.alertify_main_admin.databinding.UserEditImageDialogBinding;
+import com.example.alertify_main_admin.main_utils.LoadingDialog;
 import com.example.alertify_main_admin.models.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,18 +45,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class EditUserProfileActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private CircleImageView userImage;
-
-    private Dialog userUpdateImgDialog, userUpdateNameDialog, userUpdatePasswordDialog, profileLoadingDialog;
-
-    private ProgressBar userImgUpdateDialogProgressBar, userNameUpdateDialogProgressBar, userPasswordUpdateDialogProgressBar, loadingProfileProgressBar;
-
-    private ShapeableImageView userDialogImg;
-
+    private Dialog userUpdateImgDialog, userUpdateNameDialog, userUpdatePasswordDialog;
     private UserModel user;
 
     private String imageUrl;
@@ -65,17 +55,9 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
 
     private StorageReference firebaseStorageReference;
 
-    private TextView userName, userEmail;
-
     private DatabaseReference highAuthorityRef;
 
     private FirebaseUser firebaseUser;
-
-    private ImageView userNameEditBtn, userPasswordEditBtn;
-
-    private EditText dialogUserName;
-
-    private TextInputEditText userCurrentPassword, userNewPassword;
 
     private SharedPreferences userData;
 
@@ -83,25 +65,29 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
 
     private String imageSize;
 
+    private ActivityEditUserProfileBinding binding;
+
+    private UserEditPasswordDialogBinding userEditPasswordDialogBinding;
+
+    private UserEditNameDialogBinding userEditNameDialogBinding;
+
+    private UserEditImageDialogBinding userEditImageDialogBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_user_profile);
+        binding = ActivityEditUserProfileBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         init();
-        createProfileLoadingDialog();
     }
 
     private void init() {
-        userImage = findViewById(R.id.user_image);
-        userImage.setOnClickListener(this);
 
-        userName = findViewById(R.id.user_name);
-        userEmail = findViewById(R.id.user_email);
+        LoadingDialog.showLoadingDialog(EditUserProfileActivity.this);
 
-        userNameEditBtn = findViewById(R.id.name_edit_btn);
-        userNameEditBtn.setOnClickListener(this);
-        userPasswordEditBtn = findViewById(R.id.password_edit_btn);
-        userPasswordEditBtn.setOnClickListener(this);
+        binding.userImage.setOnClickListener(this);
+        binding.nameEditBtn.setOnClickListener(this);
+        binding.passwordEditBtn.setOnClickListener(this);
 
         highAuthorityRef = FirebaseDatabase.getInstance().getReference("AlertifyHighAuthority");
 
@@ -125,14 +111,13 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
 
                 if (user != null) {
 
-                    Glide.with(getApplicationContext()).load(user.getImgUrl()).into(userImage);
+                    Glide.with(getApplicationContext()).load(user.getImgUrl()).into(binding.userImage);
 
-                    userName.setText(user.getName());
+                    binding.userName.setText(user.getName());
 
-                    userEmail.setText(user.getEmail());
+                    binding.userEmail.setText(user.getEmail());
 
-                    loadingProfileProgressBar.setVisibility(View.INVISIBLE);
-                    profileLoadingDialog.dismiss();
+                    LoadingDialog.hideLoadingDialog();
                 }
 
             }
@@ -150,66 +135,37 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.user_image:
+            case R.id.userImage:
                 createUserImageDialog();
                 break;
-            case R.id.name_edit_btn:
+            case R.id.nameEditBtn:
                 createUserNameDialog();
                 break;
-            case R.id.password_edit_btn:
+            case R.id.passwordEditBtn:
                 createUserPasswordDialog();
                 break;
         }
     }
-
-    private void createProfileLoadingDialog()
-    {
-        profileLoadingDialog = new Dialog(EditUserProfileActivity.this);
-        profileLoadingDialog.setContentView(R.layout.profile_loading_dialog);
-        profileLoadingDialog.show();
-        profileLoadingDialog.setCancelable(false);
-        profileLoadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        loadingProfileProgressBar = profileLoadingDialog.findViewById(R.id.profile_progressbar);
-
-        loadingProfileProgressBar.setVisibility(View.VISIBLE);
-
-        profileLoadingDialog.setOnKeyListener(new Dialog.OnKeyListener() {
-
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode,
-                                 KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                    dialog.dismiss();
-                    finish();
-                }
-                return true;
-            }
-        });
-    }
     private void createUserPasswordDialog() {
+        userEditPasswordDialogBinding = UserEditPasswordDialogBinding.inflate(LayoutInflater.from(this));
         userUpdatePasswordDialog = new Dialog(EditUserProfileActivity.this);
-        userUpdatePasswordDialog.setContentView(R.layout.user_edit_password_dialog);
+        userUpdatePasswordDialog.setContentView(userEditPasswordDialogBinding.getRoot());
         userUpdatePasswordDialog.show();
         userUpdatePasswordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        userCurrentPassword = userUpdatePasswordDialog.findViewById(R.id.user_current_password);
-        userNewPassword = userUpdatePasswordDialog.findViewById(R.id.user_new_password);
-        userPasswordUpdateDialogProgressBar = userUpdatePasswordDialog.findViewById(R.id.dep_admin_password_progressbar);
-
-        userUpdatePasswordDialog.findViewById(R.id.dep_admin_close_btn).setOnClickListener(new View.OnClickListener() {
+        userEditPasswordDialogBinding.userProfilePasswordDialogCloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 userUpdatePasswordDialog.dismiss();
             }
         });
 
-        userUpdatePasswordDialog.findViewById(R.id.dep_admin_update_btn).setOnClickListener(new View.OnClickListener() {
+        userEditPasswordDialogBinding.userProfilePasswordDialogUpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isValidPassword()) {
-                    userPasswordUpdateDialogProgressBar.setVisibility(View.VISIBLE);
-                    verifyHighAuthorityCurrentPassword(firebaseUser.getEmail(), userCurrentPassword.getText().toString().trim());
+                    LoadingDialog.showLoadingDialog(EditUserProfileActivity.this);
+                    verifyHighAuthorityCurrentPassword(firebaseUser.getEmail(), userEditPasswordDialogBinding.userCurrentPassword.getText().toString().trim());
                 }
             }
         });
@@ -219,13 +175,13 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        updateUserPassword(userNewPassword.getText().toString().trim());
+                        updateUserPassword(userEditPasswordDialogBinding.userNewPassword.getText().toString().trim());
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        userPasswordUpdateDialogProgressBar.setVisibility(View.INVISIBLE);
-                        userCurrentPassword.setError("password is invalid");
+                        LoadingDialog.hideLoadingDialog();
+                        userEditPasswordDialogBinding.userCurrentPassword.setError("password is invalid");
                         Toast.makeText(EditUserProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -238,14 +194,14 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(EditUserProfileActivity.this, "User Password Updated Successfully", Toast.LENGTH_SHORT).show();
-                            userPasswordUpdateDialogProgressBar.setVisibility(View.INVISIBLE);
+                            LoadingDialog.hideLoadingDialog();
                             userUpdatePasswordDialog.dismiss();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        userPasswordUpdateDialogProgressBar.setVisibility(View.INVISIBLE);
+                        LoadingDialog.hideLoadingDialog();
                         Toast.makeText(EditUserProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -254,13 +210,13 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
     private boolean isValidPassword() {
         boolean valid = true;
 
-        if (userCurrentPassword.getText().length() < 6) {
-            userCurrentPassword.setError("enter valid password");
+        if (userEditPasswordDialogBinding.userCurrentPassword.getText().length() < 6) {
+            userEditPasswordDialogBinding.userCurrentPassword.setError("enter valid password");
             valid = false;
         }
 
-        if (userNewPassword.getText().length() < 6) {
-            userNewPassword.setError("enter valid password");
+        if (userEditPasswordDialogBinding.userNewPassword.getText().length() < 6) {
+            userEditPasswordDialogBinding.userNewPassword.setError("enter valid password");
             valid = false;
         }
 
@@ -268,31 +224,29 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
     }
 
     private void createUserNameDialog() {
+        userEditNameDialogBinding = UserEditNameDialogBinding.inflate(LayoutInflater.from(this));
         userUpdateNameDialog = new Dialog(EditUserProfileActivity.this);
-        userUpdateNameDialog.setContentView(R.layout.dep_admin_edit_name_dialog);
+        userUpdateNameDialog.setContentView(userEditNameDialogBinding.getRoot());
         userUpdateNameDialog.show();
         userUpdateNameDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        userNameUpdateDialogProgressBar = userUpdateNameDialog.findViewById(R.id.dep_admin_name_progressbar);
+        userEditNameDialogBinding.userDialogName.setText(user.getName());
 
-        dialogUserName = userUpdateNameDialog.findViewById(R.id.dep_admin_dialog_name);
-        dialogUserName.setText(user.getName());
-
-        userUpdateNameDialog.findViewById(R.id.dep_admin_close_btn).setOnClickListener(new View.OnClickListener() {
+        userEditNameDialogBinding.userEditNameDialogCloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 userUpdateNameDialog.dismiss();
             }
         });
 
-        userUpdateNameDialog.findViewById(R.id.dep_admin_update_btn).setOnClickListener(new View.OnClickListener() {
+        userEditNameDialogBinding.userEditNameDialogUpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (dialogUserName.getText().length() < 3) {
-                    dialogUserName.setError("Please enter valid name");
+                if (userEditNameDialogBinding.userDialogName.getText().length() < 3) {
+                    userEditNameDialogBinding.userDialogName.setError("Please enter valid name");
                 } else {
-                    userNameUpdateDialogProgressBar.setVisibility(View.VISIBLE);
-                    updateNameToDb(dialogUserName.getText().toString().trim());
+                    LoadingDialog.showLoadingDialog(EditUserProfileActivity.this);
+                    updateNameToDb(userEditNameDialogBinding.userDialogName.getText().toString().trim());
                 }
             }
         });
@@ -309,11 +263,11 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    userNameUpdateDialogProgressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(EditUserProfileActivity.this, "Department Admin Name Updated Successfully!", Toast.LENGTH_SHORT).show();
+                    LoadingDialog.hideLoadingDialog();
+                    Toast.makeText(EditUserProfileActivity.this, "User Name Updated Successfully!", Toast.LENGTH_SHORT).show();
                     userUpdateNameDialog.dismiss();
 
-                    dialogUserName.setText(user.getName());
+                    binding.userName.setText(user.getName());
                     editor.putString("userName", user.getName());
                     editor.apply();
                 }
@@ -327,34 +281,32 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
     }
 
     private void createUserImageDialog() {
+        userEditImageDialogBinding = UserEditImageDialogBinding.inflate(LayoutInflater.from(this));
         userUpdateImgDialog = new Dialog(EditUserProfileActivity.this);
-        userUpdateImgDialog.setContentView(R.layout.dep_admin_edit_img_dialog);
+        userUpdateImgDialog.setContentView(userEditImageDialogBinding.getRoot());
         userUpdateImgDialog.show();
         userUpdateImgDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        userImgUpdateDialogProgressBar = userUpdateImgDialog.findViewById(R.id.dep_admin_img_progressbar);
+        Glide.with(getApplicationContext()).load(user.getImgUrl()).into(userEditImageDialogBinding.userEditDialogImage);
 
-        userDialogImg = userUpdateImgDialog.findViewById(R.id.dep_admin_dialog_image);
-        Glide.with(getApplicationContext()).load(user.getImgUrl()).into(userDialogImg);
-
-        userDialogImg.setOnClickListener(new View.OnClickListener() {
+        userEditImageDialogBinding.userEditDialogImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pickNewImage();
             }
         });
 
-        userUpdateImgDialog.findViewById(R.id.dep_admin_img_close_btn).setOnClickListener(new View.OnClickListener() {
+        userEditImageDialogBinding.userEditImgDialogCloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 userUpdateImgDialog.dismiss();
             }
         });
 
-        userUpdateImgDialog.findViewById(R.id.dep_admin_img_update_btn).setOnClickListener(new View.OnClickListener() {
+        userEditImageDialogBinding.userEditImgDialogUpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userImgUpdateDialogProgressBar.setVisibility(View.VISIBLE);
+                LoadingDialog.showLoadingDialog(EditUserProfileActivity.this);
                 if (imageUri == null) {
                     updateImageUrlToDb();
                 } else if (imageUri != null) {
@@ -405,14 +357,14 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    userImgUpdateDialogProgressBar.setVisibility(View.INVISIBLE);
+                    LoadingDialog.hideLoadingDialog();
                     Toast.makeText(EditUserProfileActivity.this, "User Image Updated Successfully!", Toast.LENGTH_SHORT).show();
                     userUpdateImgDialog.dismiss();
 
                     user.setImgUrl(imageUrl);
                     editor.putString("userImgUrl", imageUrl);
                     editor.apply();
-                    Glide.with(getApplicationContext()).load(user.getImgUrl()).into(userImage);
+                    Glide.with(getApplicationContext()).load(user.getImgUrl()).into(binding.userImage);
 
                 }
             }
@@ -434,7 +386,7 @@ public class EditUserProfileActivity extends AppCompatActivity implements View.O
             if (uri != null) {
                 if (isImageSizeValid(uri)) {
                     imageUri = uri;
-                    userDialogImg.setImageURI(imageUri);
+                    userEditImageDialogBinding.userEditDialogImage.setImageURI(imageUri);
                 } else {
                     Toast.makeText(EditUserProfileActivity.this, imageSize + ". Please select an image smaller than 2 MB", Toast.LENGTH_SHORT).show();
                 }

@@ -1,35 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".fragments.Dep_Admin_Fragment">
 
-    <SearchView
-        android:id="@+id/search_view"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/depAdminSearchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:iconifiedByDefault="false"
-        android:queryBackground="@null"
-        android:queryHint="Search..."
+        app:iconifiedByDefault="false"
+        app:queryHint="@string/search"
         android:theme="@style/search_view_style" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/dep_admin_Recycler"
+        android:id="@+id/depAdminRecycler"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/search_view" />
+        android:layout_below="@+id/depAdminSearchView" />
 
-    <ProgressBar
-        android:id="@+id/fragmentProgressbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:indeterminateTint="#3490DC"
-        android:visibility="invisible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addBtn"

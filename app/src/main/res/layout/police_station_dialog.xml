@@ -9,7 +9,7 @@
         android:background="@drawable/dep_admin_edit_dialog_shape">
 
         <ImageView
-            android:id="@+id/police_station_img"
+            android:id="@+id/dialogPoliceStationImg"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
@@ -21,15 +21,15 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/police_station_img"
+            android:layout_below="@+id/dialogPoliceStationImg"
             android:layout_marginStart="10dp"
             android:layout_marginTop="30dp"
-            android:text="@string/name"
+            android:text="@string/police_station_name"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
         <EditText
-            android:id="@+id/police_station_name"
+            android:id="@+id/dialogPoliceStationName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
@@ -37,7 +37,7 @@
             android:layout_marginEnd="10dp"
             android:backgroundTint="@color/hint_clr"
             android:hint="@string/police_station_name_hint"
-            android:textColor="@color/black"
+            android:textColor="@color/hint_clr"
             android:textColorHint="@color/hint_clr"
             android:textCursorDrawable="@drawable/cursor_shape"
             android:textSize="16sp" />
@@ -46,7 +46,7 @@
             android:id="@+id/number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/police_station_name"
+            android:layout_below="@+id/dialogPoliceStationName"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:text="@string/police_station_no"
@@ -54,7 +54,7 @@
             android:textSize="18sp" />
 
         <EditText
-            android:id="@+id/police_station_number"
+            android:id="@+id/dialogPoliceStationNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/number"
@@ -62,7 +62,7 @@
             android:layout_marginEnd="10dp"
             android:backgroundTint="@color/hint_clr"
             android:hint="@string/police_station_no_hint"
-            android:textColor="@color/black"
+            android:textColor="@color/hint_clr"
             android:textColorHint="@color/hint_clr"
             android:textCursorDrawable="@drawable/cursor_shape"
             android:textSize="16sp" />
@@ -71,15 +71,15 @@
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/police_station_number"
+            android:layout_below="@+id/dialogPoliceStationNumber"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
-            android:text="@string/location"
+            android:text="@string/police_station_location"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
         <EditText
-            android:id="@+id/police_station_location"
+            android:id="@+id/dialogPoliceStationLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/location"
@@ -89,16 +89,16 @@
             android:enabled="false"
             android:hint="@string/police_station_location"
             android:paddingEnd="20dp"
-            android:textColor="@color/black"
+            android:textColor="@color/hint_clr"
             android:textColorHint="@color/hint_clr"
             android:textSize="16sp" />
 
         <ImageView
-            android:id="@+id/add_location"
+            android:id="@+id/dialogAddPoliceStationLocationBtn"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:layout_below="@+id/location"
-            android:layout_alignEnd="@+id/police_station_location"
+            android:layout_alignEnd="@+id/dialogPoliceStationLocation"
             android:layout_marginBottom="10dp"
             android:src="@drawable/baseline_add_location_24" />
 
@@ -106,22 +106,22 @@
             android:id="@+id/boundaryLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/police_station_location"
+            android:layout_below="@+id/dialogPoliceStationLocation"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp">
 
             <TextView
                 android:id="@+id/boundaries"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/boundary"
+                android:text="@string/police_station_boundary"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
             <ImageView
-                android:id="@+id/add_boundary"
+                android:id="@+id/dialogAddPoliceStationBoundaryBtn"
                 android:layout_width="30sp"
                 android:layout_height="30sp"
                 android:layout_alignParentEnd="true"
@@ -132,7 +132,7 @@
         <RelativeLayout
             android:id="@+id/boundaryDataLayout"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="100dp"
             android:layout_below="@+id/boundaryLayout"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
@@ -146,23 +146,15 @@
 
         </RelativeLayout>
 
-        <ProgressBar
-            android:id="@+id/progressbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/boundaryDataLayout"
-            android:layout_centerHorizontal="true"
-            android:indeterminateTint="@color/app_color"
-            android:visibility="invisible" />
-
         <LinearLayout
             android:id="@+id/btn_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/progressbar"
+            android:layout_below="@+id/boundaryDataLayout"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <Button

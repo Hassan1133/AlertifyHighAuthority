@@ -29,6 +29,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.adapters.DepAdminAdp;
 import com.example.alertify_main_admin.adapters.DropDownAdapter;
+import com.example.alertify_main_admin.databinding.DepAdminBinding;
+import com.example.alertify_main_admin.databinding.PoliceStationBinding;
+import com.example.alertify_main_admin.main_utils.LoadingDialog;
 import com.example.alertify_main_admin.main_utils.NetworkUtils;
 import com.example.alertify_main_admin.models.DepAdminModel;
 import com.example.alertify_main_admin.models.PoliceStationModel;
@@ -54,7 +57,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener {
 
-    private FloatingActionButton addAdminBtn;
     private Dialog dialog;
 
     private AutoCompleteTextView depAdminPoliceStation;
@@ -69,7 +71,7 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
 
     private Uri imageUri;
 
-    private ProgressBar dialogProgressBar, fragmentProgressBar;
+    private ProgressBar dialogProgressBar;
 
     private DepAdminModel depAdmin;
 
@@ -78,30 +80,24 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
 
     private List<DepAdminModel> depAdmins;
     private DepAdminAdp adp;
-
-    private RecyclerView recyclerView;
-
-    private SearchView searchView;
-
     private String imageSize;
+
+    private DepAdminBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dep_admin, container, false);
-        init(view);
+        binding = DepAdminBinding.inflate(inflater, container, false);
+        init();
         fetchData();
-        return view;
+        return binding.getRoot();
     }
 
-    private void init(View view) {
-        addAdminBtn = view.findViewById(R.id.addBtn);
-        addAdminBtn.setOnClickListener(this);
+    private void init() {
+        binding.addBtn.setOnClickListener(this);
 
         policeStationsRef = FirebaseDatabase.getInstance().getReference("AlertifyPoliceStations");
         policeStationNameList = new ArrayList<>();
-
-        fragmentProgressBar = view.findViewById(R.id.fragmentProgressbar);
 
         firebaseStorageReference = FirebaseStorage.getInstance().getReference();
 
@@ -109,25 +105,19 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
 
         depAdminRef = FirebaseDatabase.getInstance().getReference("AlertifyDepAdmin");
 
-        recyclerView = view.findViewById(R.id.dep_admin_Recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.depAdminRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.depAdminSearchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
-        searchView = view.findViewById(R.id.search_view);
-        if (searchView != null) {
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    search(newText);
-                    return true;
-                }
-            });
-
-        }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                search(newText);
+                return true;
+            }
+        });
     }
 
     private void search(String newText) {
@@ -138,7 +128,7 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
             }
         }
         adp = new DepAdminAdp(getActivity(), searchList);
-        recyclerView.setAdapter(adp);
+        binding.depAdminRecycler.setAdapter(adp);
     }
 
     @Override
@@ -444,7 +434,7 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
 
     private void fetchData() {
 
-        fragmentProgressBar.setVisibility(View.VISIBLE);
+        LoadingDialog.showLoadingDialog(getActivity());
 
         depAdminRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -456,7 +446,7 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
                     depAdmins.add(dataSnapshot.getValue(DepAdminModel.class));
                 }
 
-                fragmentProgressBar.setVisibility(View.INVISIBLE);
+                LoadingDialog.hideLoadingDialog();
 
                 setDataToRecycler(depAdmins);
 
@@ -471,6 +461,6 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
 
     private void setDataToRecycler(List<DepAdminModel> depAdmins) {
         adp = new DepAdminAdp(getActivity(), depAdmins);
-        recyclerView.setAdapter(adp);
+        binding.depAdminRecycler.setAdapter(adp);
     }
 }
