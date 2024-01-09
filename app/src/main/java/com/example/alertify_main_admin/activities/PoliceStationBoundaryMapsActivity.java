@@ -31,18 +31,19 @@ import com.example.alertify_main_admin.databinding.ActivityPoliceStationBoundary
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class PoliceStationBoundaryMapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class PoliceStationBoundaryMapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
 
     private GoogleMap googleMap;
     private ActivityPoliceStationBoundaryMapsBinding binding;
     private Geocoder geocoder;
     private SupportMapFragment mapFragment;
 
-    private List<LatLng> polygonPoints = new ArrayList<>();
+    private List<LatLng> polygonPoints;
     private PolygonOptions polygonOptions;
 
     @Override
@@ -59,18 +60,30 @@ public class PoliceStationBoundaryMapsActivity extends FragmentActivity implemen
         init();
     }
 
-    private void init()
-    {
+    private void init() {
 
         searchLocation();
 
-        binding.drawPolygonBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawPolygon();
-            }
-        });
+        binding.drawPolygonBtn.setOnClickListener(this);
+
+        binding.donePolygonBtn.setOnClickListener(this);
+
+        polygonPoints = new ArrayList<>();
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.drawPolygonBtn:
+                drawPolygon();
+                break;
+            case R.id.donePolygonBtn:
+                sendBoundaryPointsToPoliceStationDialog();
+                break;
+
+        }
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
@@ -139,19 +152,31 @@ public class PoliceStationBoundaryMapsActivity extends FragmentActivity implemen
     }
 
     private void drawPolygon() {
-        if (googleMap != null) {
+        if (googleMap != null && !polygonPoints.isEmpty()) {
             googleMap.clear();  // Clear existing markers and shapes
             polygonOptions = new PolygonOptions();
+
             for (LatLng point : polygonPoints) {
                 polygonOptions.add(point);
             }
             googleMap.addPolygon(polygonOptions);
 
-            // Reset polygonPoints for the next draw
-//            polygonPoints.clear();
+        } else {
+            Toast.makeText(this, "If map is loaded then please select boundary points if not then check your internet connection", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-            // Reset polygonPoints for the next draw
-//            polygonPoints.clear();
+    private void sendBoundaryPointsToPoliceStationDialog() {
+        if(!polygonPoints.isEmpty())
+        {
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("latLngList", (Serializable) polygonPoints);
+            setResult(Activity.RESULT_OK, returnIntent);
+            finish();
+        }
+        else
+        {
+            Toast.makeText(this, "Please select boundary points", Toast.LENGTH_SHORT).show();
         }
     }
 

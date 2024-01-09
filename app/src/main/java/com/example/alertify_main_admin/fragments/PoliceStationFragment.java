@@ -30,11 +30,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.activities.PoliceStationBoundaryMapsActivity;
+import com.example.alertify_main_admin.adapters.BoundaryAdapter;
+import com.example.alertify_main_admin.adapters.DepAdminAdp;
 import com.example.alertify_main_admin.adapters.PoliceStationAdp;
 import com.example.alertify_main_admin.activities.MapsActivity;
 import com.example.alertify_main_admin.databinding.PoliceStationBinding;
 import com.example.alertify_main_admin.main_utils.NetworkUtils;
+import com.example.alertify_main_admin.models.DepAdminModel;
 import com.example.alertify_main_admin.models.PoliceStationModel;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -81,6 +85,11 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
     private String randomId;
 
     private String imageSize;
+
+    private List<LatLng> boundaryPoints;
+
+    private BoundaryAdapter boundaryAdp;
+    private RecyclerView boundaryRecycler;
 
     @Nullable
     @Override
@@ -143,7 +152,7 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
         }
     }
 
-//    this method for create add police station dialog
+    //    this method for create add police station dialog
     private void createDialog() {
         dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.police_station_dialog);
@@ -155,6 +164,8 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
         policeStationLocation = dialog.findViewById(R.id.police_station_location);
         police_station_img = dialog.findViewById(R.id.police_station_img);
         dialogProgressBar = dialog.findViewById(R.id.progressbar);
+        boundaryRecycler = dialog.findViewById(R.id.boundariesRecycler);
+        boundaryRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         police_station_img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -429,8 +440,14 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
-
+                boundaryPoints = (List<LatLng>) result.getData().getSerializableExtra("latLngList");
+                setDataToBoundaryRecycler(boundaryPoints);
             }
         }
     });
+
+    private void setDataToBoundaryRecycler(List<LatLng> boundaryList) {
+        boundaryAdp = new BoundaryAdapter(getActivity(), boundaryList);
+        boundaryRecycler.setAdapter(boundaryAdp);
+    }
 }
