@@ -7,11 +7,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -23,14 +21,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.adapters.DropDownAdapter;
+import com.example.alertify_main_admin.databinding.ActivityEditDepAdminBinding;
+import com.example.alertify_main_admin.databinding.DepAdminEditImgDialogBinding;
+import com.example.alertify_main_admin.databinding.DepAdminEditNameDialogBinding;
+import com.example.alertify_main_admin.databinding.DepAdminEditPoliceStationDialogBinding;
+import com.example.alertify_main_admin.main_utils.LoadingDialog;
 import com.example.alertify_main_admin.models.DepAdminModel;
 import com.example.alertify_main_admin.models.PoliceStationModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.imageview.ShapeableImageView;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,66 +43,52 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class EditDepAdminActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private ActivityEditDepAdminBinding binding;
     private DepAdminModel depAdminModel;
     private String imageUrl;
-    private CircleImageView depAdminImg;
-
-    private TextView depAdminName, depAdminPoliceStation, depAdminEmail;
-
     private Dialog depAdminUpdateImgDialog, depAdminUpdateNameDialog, depAdminUpdatePoliceStationDialog;
-
-    private ShapeableImageView depAdminDialogImg;
 
     private Uri imageUri;
 
     private StorageReference firebaseStorageReference;
 
-    private ProgressBar depAdminImgProgressBar, depAdminNameProgressBar, depAdminPoliceStationProgressBar;
-
     private DatabaseReference depAdminRef, policeStationsRef;
-    private ImageView depAdminNameEditBtn, depAdminPoliceStationEditBtn, statusBtn;
-    private TextInputEditText depAdminDialogName;
     private DropDownAdapter dropDownAdapter;
     private ArrayList<String> policeStationNameList;
-    private AutoCompleteTextView depAdminDialogPoliceStation;
     private String imageSize;
+    private DepAdminEditNameDialogBinding depAdminEditNameDialogBinding;
 
+    private DepAdminEditImgDialogBinding depAdminEditImgDialogBinding;
+
+    private DepAdminEditPoliceStationDialogBinding depAdminEditPoliceStationDialogBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_dep_admin);
+        binding = ActivityEditDepAdminBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         init();
         getIntentData();
     }
 
     private void init() {
-        depAdminImg = findViewById(R.id.dep_admin_image);
-        depAdminImg.setOnClickListener(this);
-        depAdminName = findViewById(R.id.dep_admin_name);
-        depAdminPoliceStation = findViewById(R.id.dep_admin_police_station);
-        depAdminEmail = findViewById(R.id.dep_admin_email);
+
+        binding.editDepAdminImage.setOnClickListener(this);
 
         firebaseStorageReference = FirebaseStorage.getInstance().getReference();
 
         depAdminRef = FirebaseDatabase.getInstance().getReference("AlertifyDepAdmin");
 
-        depAdminNameEditBtn = findViewById(R.id.name_edit_btn);
-        depAdminNameEditBtn.setOnClickListener(this);
+        binding.depAdminNameEditBtn.setOnClickListener(this);
 
         policeStationsRef = FirebaseDatabase.getInstance().getReference("AlertifyPoliceStations");
         policeStationNameList = new ArrayList<>();
 
-        depAdminPoliceStationEditBtn = findViewById(R.id.police_station_edit_btn);
-        depAdminPoliceStationEditBtn.setOnClickListener(this);
+        binding.depAdminPoliceStationEditBtn.setOnClickListener(this);
 
-        statusBtn = findViewById(R.id.status_icon);
-        statusBtn.setOnClickListener(new View.OnClickListener() {
+        binding.depAdminStatusIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateStatus(depAdminModel);
@@ -112,46 +99,44 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
     private void getIntentData() {
         depAdminModel = (DepAdminModel) getIntent().getSerializableExtra("depAdminModel");
         imageUrl = depAdminModel.getDepAdminImageUrl();
-        Glide.with(getApplicationContext()).load(imageUrl).into(depAdminImg);
-        depAdminName.setText(depAdminModel.getDepAdminName());
-        depAdminPoliceStation.setText(depAdminModel.getDepAdminPoliceStation());
-        depAdminEmail.setText(depAdminModel.getDepAdminEmail());
+        Glide.with(getApplicationContext()).load(imageUrl).into(binding.editDepAdminImage);
+        binding.editDepAdminName.setText(depAdminModel.getDepAdminName());
+        binding.editDepAdminPoliceStation.setText(depAdminModel.getDepAdminPoliceStation());
+        binding.editDepAdminEmail.setText(depAdminModel.getDepAdminEmail());
         if (depAdminModel.getDepAdminStatus().equals("unblock")) {
-            statusBtn.setImageResource(R.drawable.unlock);
+            binding.depAdminStatusIcon.setImageResource(R.drawable.unlock);
         } else if (depAdminModel.getDepAdminStatus().equals("block")) {
-            statusBtn.setImageResource(R.drawable.lock);
+            binding.depAdminStatusIcon.setImageResource(R.drawable.lock);
         }
     }
 
     private void createDepAdminImageDialog() {
+        depAdminEditImgDialogBinding = DepAdminEditImgDialogBinding.inflate(LayoutInflater.from(this));
         depAdminUpdateImgDialog = new Dialog(EditDepAdminActivity.this);
-        depAdminUpdateImgDialog.setContentView(R.layout.dep_admin_edit_img_dialog);
+        depAdminUpdateImgDialog.setContentView(depAdminEditImgDialogBinding.getRoot());
         depAdminUpdateImgDialog.show();
         depAdminUpdateImgDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        depAdminImgProgressBar = depAdminUpdateImgDialog.findViewById(R.id.dep_admin_img_progressbar);
+        Glide.with(getApplicationContext()).load(imageUrl).into(depAdminEditImgDialogBinding.editDepAdminDialogImage);
 
-        depAdminDialogImg = depAdminUpdateImgDialog.findViewById(R.id.dep_admin_dialog_image);
-        Glide.with(getApplicationContext()).load(imageUrl).into(depAdminDialogImg);
-
-        depAdminDialogImg.setOnClickListener(new View.OnClickListener() {
+        depAdminEditImgDialogBinding.editDepAdminDialogImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pickNewImage();
             }
         });
 
-        depAdminUpdateImgDialog.findViewById(R.id.dep_admin_img_close_btn).setOnClickListener(new View.OnClickListener() {
+        depAdminEditImgDialogBinding.editDepAdminImgCloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 depAdminUpdateImgDialog.dismiss();
             }
         });
 
-        depAdminUpdateImgDialog.findViewById(R.id.dep_admin_img_update_btn).setOnClickListener(new View.OnClickListener() {
+        depAdminEditImgDialogBinding.editDepAdminImgUpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                depAdminImgProgressBar.setVisibility(View.VISIBLE);
+                LoadingDialog.showLoadingDialog(EditDepAdminActivity.this);
                 if (imageUri == null) {
                     updateImageUrlToDb(depAdminModel);
                 } else if (imageUri != null) {
@@ -204,11 +189,11 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    depAdminImgProgressBar.setVisibility(View.INVISIBLE);
+                    LoadingDialog.hideLoadingDialog();
                     Toast.makeText(EditDepAdminActivity.this, "Department Admin Image Updated Successfully!", Toast.LENGTH_SHORT).show();
                     depAdminUpdateImgDialog.dismiss();
 
-                    Glide.with(getApplicationContext()).load(imageUrl).into(depAdminImg);
+                    Glide.with(getApplicationContext()).load(imageUrl).into(binding.editDepAdminImage);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -229,7 +214,7 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
             if (uri != null) {
                 if (isImageSizeValid(uri)) {
                     imageUri = uri;
-                    depAdminDialogImg.setImageURI(imageUri);
+                    depAdminEditImgDialogBinding.editDepAdminDialogImage.setImageURI(imageUri);
                 } else {
                     Toast.makeText(EditDepAdminActivity.this, imageSize + ". Please select an image smaller than 2 MB", Toast.LENGTH_SHORT).show();
                 }
@@ -271,44 +256,41 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.dep_admin_image:
+            case R.id.editDepAdminImage:
                 createDepAdminImageDialog();
                 break;
-            case R.id.name_edit_btn:
+            case R.id.depAdminNameEditBtn:
                 createDepAdminNameDialog();
                 break;
-            case R.id.police_station_edit_btn:
+            case R.id.depAdminPoliceStationEditBtn:
                 createDepAdminPoliceStationDialog();
                 break;
         }
     }
-
     private void createDepAdminNameDialog() {
+        depAdminEditNameDialogBinding = DepAdminEditNameDialogBinding.inflate(LayoutInflater.from(this));
         depAdminUpdateNameDialog = new Dialog(EditDepAdminActivity.this);
-        depAdminUpdateNameDialog.setContentView(R.layout.dep_admin_edit_name_dialog);
+        depAdminUpdateNameDialog.setContentView(depAdminEditNameDialogBinding.getRoot());
         depAdminUpdateNameDialog.show();
         depAdminUpdateNameDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        depAdminNameProgressBar = depAdminUpdateNameDialog.findViewById(R.id.dep_admin_name_progressbar);
+        depAdminEditNameDialogBinding.editDepAdminDialogName.setText(depAdminModel.getDepAdminName());
 
-        depAdminDialogName = depAdminUpdateNameDialog.findViewById(R.id.dep_admin_dialog_name);
-        depAdminDialogName.setText(depAdminModel.getDepAdminName());
-
-        depAdminUpdateNameDialog.findViewById(R.id.dep_admin_close_btn).setOnClickListener(new View.OnClickListener() {
+        depAdminEditNameDialogBinding.editDepAdminNameDialogCloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 depAdminUpdateNameDialog.dismiss();
             }
         });
 
-        depAdminUpdateNameDialog.findViewById(R.id.dep_admin_update_btn).setOnClickListener(new View.OnClickListener() {
+        depAdminEditNameDialogBinding.editDepAdminUpdateNameDialogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (depAdminDialogName.getText().length() < 3) {
-                    depAdminDialogName.setError("Please enter valid name");
+                if (depAdminEditNameDialogBinding.editDepAdminDialogName.getText().length() < 3) {
+                    depAdminEditNameDialogBinding.editDepAdminDialogName.setError("Please enter valid name");
                 } else {
-                    depAdminNameProgressBar.setVisibility(View.VISIBLE);
-                    updateNameToDb(depAdminDialogName.getText().toString().trim());
+                    LoadingDialog.showLoadingDialog(EditDepAdminActivity.this);
+                    updateNameToDb(depAdminEditNameDialogBinding.editDepAdminDialogName.getText().toString().trim());
                 }
             }
         });
@@ -325,11 +307,11 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    depAdminNameProgressBar.setVisibility(View.INVISIBLE);
+                    LoadingDialog.hideLoadingDialog();
                     Toast.makeText(EditDepAdminActivity.this, "Department Admin Name Updated Successfully!", Toast.LENGTH_SHORT).show();
                     depAdminUpdateNameDialog.dismiss();
 
-                    depAdminName.setText(depAdminModel.getDepAdminName());
+                    binding.editDepAdminName.setText(depAdminModel.getDepAdminName());
 
                 }
             }
@@ -355,20 +337,20 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
 
                     count++;
 
-                    if (dep.getDepAdminPoliceStation().equalsIgnoreCase(depAdminDialogPoliceStation.getText().toString())) {
-                        depAdminDialogPoliceStation.setText("");
-                        depAdminDialogPoliceStation.setError("Police Station already assigned. Please choose a different one");
+                    if (dep.getDepAdminPoliceStation().equalsIgnoreCase(depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.getText().toString())) {
+                        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setText("");
+                        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setError("Police Station already assigned. Please choose a different one");
                         Toast.makeText(EditDepAdminActivity.this, "Police Station already assigned. Please choose a different one", Toast.LENGTH_SHORT).show();
-                        depAdminPoliceStationProgressBar.setVisibility(View.INVISIBLE);
+                        LoadingDialog.hideLoadingDialog();
                         check = true;
                         return;
                     } else if (count == snapshot.getChildrenCount()) {
                         if (!check) {
-                            if (depAdminDialogPoliceStation.length() == 0) {
-                                depAdminPoliceStationProgressBar.setVisibility(View.INVISIBLE);
-                                depAdminDialogPoliceStation.setError("Please enter valid name");
+                            if (depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.length() == 0) {
+                                LoadingDialog.hideLoadingDialog();
+                                depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setError("Please enter valid name");
                             } else {
-                                updatePoliceStationToDb(depAdminDialogPoliceStation.getText().toString());
+                                updatePoliceStationToDb(depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.getText().toString());
                             }
                         }
                     }
@@ -383,31 +365,28 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void createDepAdminPoliceStationDialog() {
+        depAdminEditPoliceStationDialogBinding = DepAdminEditPoliceStationDialogBinding.inflate(LayoutInflater.from(this));
         depAdminUpdatePoliceStationDialog = new Dialog(EditDepAdminActivity.this);
-        depAdminUpdatePoliceStationDialog.setContentView(R.layout.dep_admin_edit_police_station_dialog);
+        depAdminUpdatePoliceStationDialog.setContentView(depAdminEditPoliceStationDialogBinding.getRoot());
         depAdminUpdatePoliceStationDialog.show();
         depAdminUpdatePoliceStationDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        depAdminPoliceStationProgressBar = depAdminUpdatePoliceStationDialog.findViewById(R.id.dep_admin_police_station_progressbar);
-
-        depAdminDialogPoliceStation = depAdminUpdatePoliceStationDialog.findViewById(R.id.dep_admin_police_station);
-
         fetchPoliceStationNameForDialogDropDown();
         dropDownAdapter = new DropDownAdapter(EditDepAdminActivity.this, policeStationNameList);
-        depAdminDialogPoliceStation.setAdapter(dropDownAdapter);
-        depAdminDialogPoliceStation.setText(depAdminModel.getDepAdminPoliceStation());
+        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setAdapter(dropDownAdapter);
+        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setText(depAdminModel.getDepAdminPoliceStation());
 
-        depAdminUpdatePoliceStationDialog.findViewById(R.id.dep_admin_close_btn).setOnClickListener(new View.OnClickListener() {
+        depAdminEditPoliceStationDialogBinding.editDepAdminCloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 depAdminUpdatePoliceStationDialog.dismiss();
             }
         });
 
-        depAdminUpdatePoliceStationDialog.findViewById(R.id.dep_admin_update_btn).setOnClickListener(new View.OnClickListener() {
+        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStationDialogUpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                depAdminPoliceStationProgressBar.setVisibility(View.VISIBLE);
+                LoadingDialog.showLoadingDialog(EditDepAdminActivity.this);
                 policeAlreadyAssignedOrNot(depAdminModel);
             }
         });
@@ -424,11 +403,11 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    depAdminPoliceStationProgressBar.setVisibility(View.INVISIBLE);
+                    LoadingDialog.hideLoadingDialog();
                     Toast.makeText(EditDepAdminActivity.this, "Department Admin Police Station Updated Successfully!", Toast.LENGTH_SHORT).show();
                     depAdminUpdatePoliceStationDialog.dismiss();
 
-                    depAdminPoliceStation.setText(depAdminModel.getDepAdminPoliceStation());
+                    binding.editDepAdminPoliceStation.setText(depAdminModel.getDepAdminPoliceStation());
 
                 }
             }
@@ -477,7 +456,7 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        statusBtn.setImageResource(R.drawable.lock);
+                        binding.depAdminStatusIcon.setImageResource(R.drawable.lock);
                         Toast.makeText(EditDepAdminActivity.this, "Department Admin Blocked Successfully!", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -499,7 +478,7 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        statusBtn.setImageResource(R.drawable.unlock);
+                        binding.depAdminStatusIcon.setImageResource(R.drawable.unlock);
                         Toast.makeText(EditDepAdminActivity.this, "Department Admin UnBlocked Successfully!", Toast.LENGTH_SHORT).show();
                     }
                 }

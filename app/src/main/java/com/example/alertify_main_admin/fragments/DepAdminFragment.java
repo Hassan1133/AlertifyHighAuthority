@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -24,13 +23,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.adapters.DepAdminAdp;
 import com.example.alertify_main_admin.adapters.DropDownAdapter;
 import com.example.alertify_main_admin.databinding.DepAdminBinding;
-import com.example.alertify_main_admin.databinding.PoliceStationBinding;
+import com.example.alertify_main_admin.databinding.DepAdminDialogBinding;
 import com.example.alertify_main_admin.main_utils.LoadingDialog;
 import com.example.alertify_main_admin.main_utils.NetworkUtils;
 import com.example.alertify_main_admin.models.DepAdminModel;
@@ -39,7 +37,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,23 +52,13 @@ import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener {
+public class DepAdminFragment extends Fragment implements View.OnClickListener {
 
     private Dialog dialog;
-
-    private AutoCompleteTextView depAdminPoliceStation;
-
     private ArrayList<String> policeStationNameList;
 
     private DropDownAdapter dropDownAdapter;
-
-    private CircleImageView depAdminImg;
-
-    private EditText depAdminName, depAdminEmail;
-
     private Uri imageUri;
-
-    private ProgressBar dialogProgressBar;
 
     private DepAdminModel depAdmin;
 
@@ -83,6 +70,8 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
     private String imageSize;
 
     private DepAdminBinding binding;
+
+    private DepAdminDialogBinding depAdminDialogBinding;
 
     @Nullable
     @Override
@@ -149,38 +138,33 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
     }
 
     private void createDialog() {
+        depAdminDialogBinding = DepAdminDialogBinding.inflate(LayoutInflater.from(getActivity()));
         dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.dep_admin_dialog);
+        dialog.setContentView(depAdminDialogBinding.getRoot());
         dialog.show();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        depAdminImg = dialog.findViewById(R.id.dep_admin_image);
-        depAdminName = dialog.findViewById(R.id.dep_admin_name);
-        depAdminPoliceStation = dialog.findViewById(R.id.dep_admin_police_station);
-        depAdminEmail = dialog.findViewById(R.id.dep_admin_email);
-        dialogProgressBar = dialog.findViewById(R.id.progressbar);
-
         fetchPoliceStationNameForDropDown();
         dropDownAdapter = new DropDownAdapter(getActivity(), policeStationNameList);
-        depAdminPoliceStation.setAdapter(dropDownAdapter);
+        depAdminDialogBinding.depAdminPoliceStation.setAdapter(dropDownAdapter);
 
-        depAdminImg.setOnClickListener(new View.OnClickListener() {
+        depAdminDialogBinding.depAdminImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pickImage();
             }
         });
 
-        dialog.findViewById(R.id.okBtn).setOnClickListener(new View.OnClickListener() {
+        depAdminDialogBinding.okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isValid()) {
-                    dialogProgressBar.setVisibility(View.VISIBLE);
+                    LoadingDialog.showLoadingDialog(getActivity());
 
                     depAdmin = new DepAdminModel();
-                    depAdmin.setDepAdminName(depAdminName.getText().toString().trim());
-                    depAdmin.setDepAdminPoliceStation(depAdminPoliceStation.getText().toString());
-                    depAdmin.setDepAdminEmail(depAdminEmail.getText().toString().trim());
+                    depAdmin.setDepAdminName(depAdminDialogBinding.depAdminName.getText().toString().trim());
+                    depAdmin.setDepAdminPoliceStation(depAdminDialogBinding.depAdminPoliceStation.getText().toString());
+                    depAdmin.setDepAdminEmail(depAdminDialogBinding.depAdminEmail.getText().toString().trim());
                     depAdmin.setUid("");
                     depAdmin.setDepAdminStatus("unblock");
 
@@ -189,7 +173,7 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
             }
         });
 
-        dialog.findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
+        depAdminDialogBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -212,11 +196,13 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
 
                         count++;
 
-                        if (dep.getDepAdminEmail().equals(depAdminEmail.getText().toString())) {
-                            depAdminEmail.setText("");
+                        if (dep.getDepAdminEmail().equals(depAdminDialogBinding.depAdminEmail.getText().toString())) {
+                            depAdminDialogBinding.depAdminEmail.setText("");
                             Toast.makeText(getActivity(), "Email already exists. Please choose a different one", Toast.LENGTH_SHORT).show();
-                            depAdminEmail.setError("Email already exists. Please choose a different one");
-                            dialogProgressBar.setVisibility(View.INVISIBLE);
+                            depAdminDialogBinding.depAdminEmail.setError("Email already exists. Please choose a different one");
+
+                            LoadingDialog.hideLoadingDialog();
+
                             check = true;
                             return;
                         } else if (count == snapshot.getChildrenCount()) {
@@ -253,11 +239,11 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
 
                         count++;
 
-                        if (dep.getDepAdminPoliceStation().equalsIgnoreCase(depAdminPoliceStation.getText().toString())) {
-                            depAdminPoliceStation.setText("");
+                        if (dep.getDepAdminPoliceStation().equalsIgnoreCase(depAdminDialogBinding.depAdminPoliceStation.getText().toString())) {
+                            depAdminDialogBinding.depAdminPoliceStation.setText("");
                             Toast.makeText(getActivity(), "Police Station already assigned. Please choose a different one", Toast.LENGTH_SHORT).show();
-                            depAdminPoliceStation.setError("Police Station already assigned. Please choose a different one");
-                            dialogProgressBar.setVisibility(View.INVISIBLE);
+                            depAdminDialogBinding.depAdminPoliceStation.setError("Police Station already assigned. Please choose a different one");
+                            LoadingDialog.hideLoadingDialog();
                             check = true;
                             return;
                         } else if (count == snapshot.getChildrenCount()) {
@@ -322,7 +308,7 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    dialogProgressBar.setVisibility(View.INVISIBLE);
+                    LoadingDialog.hideLoadingDialog();
                     Toast.makeText(getActivity(), "Department Admin added successfully!", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
@@ -345,7 +331,7 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
             if (uri != null) {
                 if (isImageSizeValid(uri)) {
                     imageUri = uri;
-                    depAdminImg.setImageURI(imageUri);
+                    depAdminDialogBinding.depAdminImage.setImageURI(imageUri);
                 } else {
                     Toast.makeText(getActivity(), imageSize + ". Please select an image smaller than 2 MB", Toast.LENGTH_SHORT).show();
                 }
@@ -392,23 +378,22 @@ public class Dep_Admin_Fragment extends Fragment implements View.OnClickListener
             valid = false;
         }
 
-        if (depAdminName.getText().length() < 3) {
-            depAdminName.setError("Please enter valid name");
+        if (depAdminDialogBinding.depAdminName.getText().length() < 3) {
+            depAdminDialogBinding.depAdminName.setError("Please enter valid name");
             valid = false;
         }
-        if (depAdminPoliceStation.getText().length() == 0) {
-            depAdminPoliceStation.setError("Please select police station");
+        if (depAdminDialogBinding.depAdminPoliceStation.getText().length() == 0) {
+            depAdminDialogBinding.depAdminPoliceStation.setError("Please select police station");
             valid = false;
         }
-        if (!Patterns.EMAIL_ADDRESS.matcher(depAdminEmail.getText()).matches()) {
-            depAdminEmail.setError("Please enter valid email");
+        if (!Patterns.EMAIL_ADDRESS.matcher(depAdminDialogBinding.depAdminEmail.getText()).matches()) {
+            depAdminDialogBinding.depAdminEmail.setError("Please enter valid email");
             valid = false;
         }
         return valid;
     }
 
     private void fetchPoliceStationNameForDropDown() {
-
 
         policeStationsRef.addValueEventListener(new ValueEventListener() {
             @Override

@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/noto_serif_bold"
-        android:text="ALERTIFY"
+        android:text="@string/alertify_heading"
         android:textColor="@color/white"
         android:layout_toEndOf="@+id/tool_bar_menu"
         android:layout_centerVertical="true"

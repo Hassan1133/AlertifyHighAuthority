@@ -10,7 +10,7 @@
         android:background="@drawable/dep_admin_edit_dialog_shape">
 
         <ImageView
-            android:id="@+id/dep_admin_close_btn"
+            android:id="@+id/editDepAdminNameDialogCloseBtn"
             android:layout_width="20sp"
             android:layout_height="20sp"
             android:layout_alignParentEnd="true"
@@ -21,45 +21,37 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dep_admin_close_btn"
+            android:layout_below="@+id/editDepAdminNameDialogCloseBtn"
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="20dp"
-            android:hint="Department Admin Name"
-            android:textColorHint="#676767"
-            app:boxStrokeColor="#676767"
-            app:hintTextColor="#676767">
+            android:hint="@string/dep_admin_name_hint"
+            android:textColorHint="@color/hint_clr"
+            app:boxStrokeColor="@color/hint_clr"
+            app:hintTextColor="@color/hint_clr">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dep_admin_dialog_name"
+                android:id="@+id/editDepAdminDialogName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textCursorDrawable="@drawable/cursor_shape"
                 android:textSize="15sp"
-                android:textColor="#676767"
+                android:textColor="@color/hint_clr"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ProgressBar
-            android:id="@+id/dep_admin_name_progressbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/dep_admin_dialog_name_layout"
-            android:layout_centerHorizontal="true"
-            android:indeterminateTint="#3490DC"
-            android:visibility="invisible" />
-
         <Button
-            android:id="@+id/dep_admin_update_btn"
+            android:id="@+id/editDepAdminUpdateNameDialogBtn"
             android:layout_width="match_parent"
             android:layout_height="50sp"
             android:layout_below="@id/dep_admin_dialog_name_layout"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:backgroundTint="#3490DC"
-            android:text="update"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/app_color"
+            android:text="@string/update"
             android:textColor="@color/white" />
 
     </RelativeLayout>

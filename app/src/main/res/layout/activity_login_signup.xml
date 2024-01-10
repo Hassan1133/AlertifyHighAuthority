@@ -35,7 +35,7 @@
         android:background="@drawable/login_signup_shape">
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
+            android:id="@+id/tabsLayout"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:background="@drawable/login_signup_shape"
@@ -46,10 +46,10 @@
         </com.google.android.material.tabs.TabLayout>
 
         <androidx.viewpager.widget.ViewPager
-            android:id="@+id/view_pager"
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/tabs" />
+            android:layout_below="@+id/tabsLayout" />
 
 
     </RelativeLayout>

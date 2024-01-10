@@ -9,13 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.alertify_main_admin.R;
+import com.example.alertify_main_admin.databinding.ComplaintsBinding;
 
-public class Complaints_Fragment extends Fragment {
+public class ComplaintsFragment extends Fragment {
+
+    private ComplaintsBinding binding;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home,container,false);
-        return view;
+        binding = ComplaintsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 }

@@ -10,14 +10,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import com.example.alertify_main_admin.R;
+import com.example.alertify_main_admin.databinding.ActivitySplashScreenBinding;
 
 
 public class SplashScreen extends AppCompatActivity {
 
+    private ActivitySplashScreenBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
+        binding = ActivitySplashScreenBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         goToNextActivity();
     }

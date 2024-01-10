@@ -9,11 +9,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#3490DC"
+        android:background="@color/app_color"
         >
 
         <ImageView
-            android:id="@+id/status_icon"
+            android:id="@+id/depAdminStatusIcon"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_alignParentEnd="true"
@@ -28,13 +28,13 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
             android:fontFamily="@font/noto_serif_bold"
-            android:layout_below="@+id/status_icon"
+            android:layout_below="@+id/depAdminStatusIcon"
             android:text="ALERTIFY"
             android:textColor="@color/white"
             android:textSize="30sp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/dep_admin_image"
+            android:id="@+id/editDepAdminImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_below="@+id/txt_alertify"
@@ -47,7 +47,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/dep_admin_image"
+            android:layout_below="@+id/editDepAdminImage"
             android:layout_marginTop="-55dp"
             android:background="@drawable/login_signup_shape"
             android:backgroundTint="@color/white"
@@ -74,7 +74,7 @@
                 android:textSize="17sp" />
 
             <ImageView
-                android:id="@+id/name_edit_btn"
+                android:id="@+id/depAdminNameEditBtn"
                 android:layout_width="18sp"
                 android:layout_height="18sp"
                 android:layout_below="@+id/name"
@@ -85,14 +85,14 @@
                 android:src="@drawable/pencil" />
 
             <TextView
-                android:id="@+id/dep_admin_name"
+                android:id="@+id/editDepAdminName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/name"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
-                android:layout_toStartOf="@+id/name_edit_btn"
+                android:layout_toStartOf="@+id/depAdminNameEditBtn"
                 android:layout_toEndOf="@+id/name_icon"
                 android:textColor="#7C7B7B"
                 android:textSize="15sp" />
@@ -101,7 +101,7 @@
                 android:id="@+id/name_underline"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_below="@id/dep_admin_name"
+                android:layout_below="@id/editDepAdminName"
                 android:layout_marginTop="20dp"
                 android:background="#B1B1B1" />
 
@@ -127,7 +127,7 @@
                 android:textSize="17sp" />
 
             <ImageView
-                android:id="@+id/police_station_edit_btn"
+                android:id="@+id/depAdminPoliceStationEditBtn"
                 android:layout_width="18sp"
                 android:layout_height="18sp"
                 android:layout_below="@+id/police_station"
@@ -137,14 +137,14 @@
                 android:src="@drawable/pencil" />
 
             <TextView
-                android:id="@+id/dep_admin_police_station"
+                android:id="@+id/editDepAdminPoliceStation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/police_station"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
-                android:layout_toStartOf="@+id/police_station_edit_btn"
+                android:layout_toStartOf="@+id/depAdminPoliceStationEditBtn"
                 android:layout_toEndOf="@+id/police_station_icon"
                 android:textColor="#7C7B7B"
                 android:textSize="15sp" />
@@ -153,7 +153,7 @@
                 android:id="@+id/police_station_underline"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_below="@id/dep_admin_police_station"
+                android:layout_below="@id/editDepAdminPoliceStation"
                 android:layout_marginTop="20dp"
                 android:background="#B1B1B1" />
 
@@ -181,7 +181,7 @@
 
 
             <TextView
-                android:id="@+id/dep_admin_email"
+                android:id="@+id/editDepAdminEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/email"

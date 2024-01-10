@@ -14,6 +14,8 @@
     <string name="update">Update</string>
     <string name="police_station_boundary">Boundary :</string>
     <string name="police_station_no">No :</string>
+    <string name="email_hint">example@gmail.com</string>
+    <string name="dep_admin_name_hint">enter department admin name</string>
     <string name="police_station_location_hint">enter police station\'s location</string>
     <string name="police_station_name_hint">enter police station name</string>
     <string name="police_station_no_hint">enter police station number</string>

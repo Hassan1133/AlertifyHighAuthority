@@ -30,8 +30,8 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.alertify_main_admin.R;
-import com.example.alertify_main_admin.fragments.Complaints_Fragment;
-import com.example.alertify_main_admin.fragments.Dep_Admin_Fragment;
+import com.example.alertify_main_admin.fragments.ComplaintsFragment;
+import com.example.alertify_main_admin.fragments.DepAdminFragment;
 import com.example.alertify_main_admin.fragments.PoliceStationFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView toolBarBtn;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private FirebaseAuth firebaseAuth;
     private CircleImageView userImage;
     private TextView userName, userEmail;
 
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bottomNavigationSelection();
         checkMapServices();
         getLocationPermission();
-        loadFragment(new Complaints_Fragment());
+        loadFragment(new ComplaintsFragment());
     }
 
     @Override
@@ -106,9 +105,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userImage = headerView.findViewById(R.id.circle_img);
         userName = headerView.findViewById(R.id.user_name);
         userEmail = headerView.findViewById(R.id.user_email);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-
         bottom_navigation = findViewById(R.id.bottom_navigation);
 
         setProfileData();
@@ -152,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         drawer.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.home:
-                        loadFragment(new Complaints_Fragment());
+                        loadFragment(new ComplaintsFragment());
                         bottom_navigation.setSelectedItemId(R.id.complaints);
                         drawer.closeDrawer(GravityCompat.START);
                         break;
@@ -176,10 +172,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.complaints:
-                        loadFragment(new Complaints_Fragment());
+                        loadFragment(new ComplaintsFragment());
                         return true;
                     case R.id.dep_admin:
-                        loadFragment(new Dep_Admin_Fragment());
+                        loadFragment(new DepAdminFragment());
                         return true;
                     case R.id.police_station:
                         if (isMapsEnabled()) {

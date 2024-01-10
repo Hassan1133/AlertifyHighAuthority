@@ -7,21 +7,22 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.alertify_main_admin.adapters.ViewPagerAdapter;
 import com.example.alertify_main_admin.R;
+import com.example.alertify_main_admin.databinding.ActivityEditUserProfileBinding;
+import com.example.alertify_main_admin.databinding.ActivityLoginSignupBinding;
 import com.example.alertify_main_admin.fragments.LoginFragment;
 import com.example.alertify_main_admin.fragments.SignupFragment;
 import com.google.android.material.tabs.TabLayout;
 
 public class LoginSignupActivity extends AppCompatActivity {
 
-    TabLayout tabLayout;
-    ViewPagerAdapter viewPagerAdapter;
-    ViewPager viewPager;
+    private ActivityLoginSignupBinding binding;
+    private ViewPagerAdapter viewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_signup);
-
+        binding = ActivityLoginSignupBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         init();
 
     }
@@ -34,13 +35,11 @@ public class LoginSignupActivity extends AppCompatActivity {
         viewPagerAdapter.addFragment(new LoginFragment(), "LOGIN");
         viewPagerAdapter.addFragment(new SignupFragment(), "SIGNUP");
 
-        viewPager = findViewById(R.id.view_pager);
         // set adapter on viewpager
-        viewPager.setAdapter(viewPagerAdapter);
+        binding.viewPager.setAdapter(viewPagerAdapter);
 
-        tabLayout = findViewById(R.id.tabs);
         // set tabLayout with viewpager
-        tabLayout.setupWithViewPager(viewPager);
+        binding.tabsLayout.setupWithViewPager(binding.viewPager);
     }
 
 }

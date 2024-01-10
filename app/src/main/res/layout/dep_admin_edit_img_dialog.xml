@@ -12,7 +12,7 @@
         >
 
         <ImageView
-            android:id="@+id/dep_admin_img_close_btn"
+            android:id="@+id/editDepAdminImgCloseBtn"
             android:layout_width="20sp"
             android:layout_height="20sp"
             android:layout_alignParentEnd="true"
@@ -21,7 +21,7 @@
 
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/dep_admin_dialog_image"
+            android:id="@+id/editDepAdminDialogImage"
             android:layout_width="180dp"
             android:layout_height="180dp"
             android:layout_centerHorizontal="true"
@@ -30,26 +30,17 @@
             app:shapeAppearance="@style/dep_admin_update_img_corners"
             />
 
-        <ProgressBar
-            android:id="@+id/dep_admin_img_progressbar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_below="@+id/dep_admin_dialog_image"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
-            android:indeterminateTint="#3490DC"
-            android:visibility="invisible" />
-
         <Button
-            android:id="@+id/dep_admin_img_update_btn"
+            android:id="@+id/editDepAdminImgUpdateBtn"
             android:layout_width="match_parent"
             android:layout_height="50sp"
-            android:layout_below="@id/dep_admin_img_progressbar"
+            android:layout_below="@id/editDepAdminDialogImage"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:backgroundTint="#3490DC"
-            android:text="update"
+            android:backgroundTint="@color/app_color"
+            android:textAllCaps="false"
+            android:text="@string/update"
             android:textColor="@color/white"
              />
 
