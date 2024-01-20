@@ -8,6 +8,7 @@
     <string name="cancel">Cancel</string>
     <string name="user_name_hint">enter user name</string>
     <string name="ok">Ok</string>
+    <string name="maps_api_key">AIzaSyCoDtci5S11xJfMTs4zIJvBoytoIKnfn_Y</string>
     <string name="search">Search...</string>
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>

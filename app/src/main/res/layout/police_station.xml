@@ -8,13 +8,16 @@
     <androidx.appcompat.widget.SearchView
         android:id="@+id/policeStationSearchView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="18dp"
+        android:layout_height="35dp"
+        android:layout_margin="15dp"
+        android:background="@drawable/fragment_search_view_bg"
+        android:elevation="3dp"
+        android:theme="@style/search_view_style"
         app:iconifiedByDefault="false"
-        app:queryHint="@string/search"
-        android:theme="@style/search_view_style" />
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:queryBackground="@color/transparent"
+        app:queryHint="@string/search" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/policeStationRecycler"

@@ -19,7 +19,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCoDtci5S11xJfMTs4zIJvBoytoIKnfn_Y" />
+            android:value="@string/maps_api_key" />
 
         <activity
             android:name=".activities.PoliceStationBoundaryMapsActivity"
