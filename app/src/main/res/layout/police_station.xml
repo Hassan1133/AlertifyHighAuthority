@@ -12,10 +12,10 @@
         android:layout_margin="15dp"
         android:background="@drawable/fragment_search_view_bg"
         android:elevation="3dp"
-        android:theme="@style/search_view_style"
-        app:iconifiedByDefault="false"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
+        android:theme="@style/search_view_style"
+        app:iconifiedByDefault="false"
         app:queryBackground="@color/transparent"
         app:queryHint="@string/search" />
 
