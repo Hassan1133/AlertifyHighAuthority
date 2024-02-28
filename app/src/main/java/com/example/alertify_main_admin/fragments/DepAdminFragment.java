@@ -165,7 +165,8 @@ public class DepAdminFragment extends Fragment implements View.OnClickListener {
                     depAdmin.setDepAdminName(depAdminDialogBinding.depAdminName.getText().toString().trim());
                     depAdmin.setDepAdminPoliceStation(depAdminDialogBinding.depAdminPoliceStation.getText().toString());
                     depAdmin.setDepAdminEmail(depAdminDialogBinding.depAdminEmail.getText().toString().trim());
-                    depAdmin.setUid("");
+                    depAdmin.setDepAdminUid("");
+                    depAdmin.setDepAdminFCMToken("");
                     depAdmin.setDepAdminStatus("unblock");
 
                     depAdminAlreadyExistsOrNot(depAdmin);

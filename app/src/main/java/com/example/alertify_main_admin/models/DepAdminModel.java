@@ -6,7 +6,7 @@ public class DepAdminModel implements Serializable {
 
     private String depAdminId;
 
-    private String uId;
+    private String depAdminUid;
     private String depAdminImageUrl;
 
     private String depAdminName;
@@ -15,6 +15,8 @@ public class DepAdminModel implements Serializable {
     private String depAdminEmail;
 
     private String depAdminStatus;
+
+    private String depAdminFCMToken;
 
     public String getDepAdminId() {
         return depAdminId;
@@ -56,12 +58,12 @@ public class DepAdminModel implements Serializable {
         this.depAdminEmail = depAdminEmail;
     }
 
-    public String getUid() {
-        return uId;
+    public String getDepAdminUid() {
+        return depAdminUid;
     }
 
-    public void setUid(String uId) {
-        this.uId = uId;
+    public void setDepAdminUid(String depAdminUid) {
+        this.depAdminUid = depAdminUid;
     }
 
     public String getDepAdminStatus() {
@@ -70,5 +72,13 @@ public class DepAdminModel implements Serializable {
 
     public void setDepAdminStatus(String depAdminStatus) {
         this.depAdminStatus = depAdminStatus;
+    }
+
+    public String getDepAdminFCMToken() {
+        return depAdminFCMToken;
+    }
+
+    public void setDepAdminFCMToken(String depAdminFCMToken) {
+        this.depAdminFCMToken = depAdminFCMToken;
     }
 }
