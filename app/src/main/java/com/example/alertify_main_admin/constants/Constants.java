@@ -6,6 +6,6 @@ public interface Constants {
 
     int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 103;
 
-    int PICK_IMAGE_REQUEST = 104;
-
+    String ALERTIFY_POLICE_STATIONS_REF = "AlertifyPoliceStations";
+    String ALERTIFY_HIGH_AUTHORITY_REF = "AlertifyHighAuthority";
 }

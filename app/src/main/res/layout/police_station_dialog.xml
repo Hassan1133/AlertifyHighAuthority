@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/dep_admin_edit_dialog_shape">
+        android:background="@drawable/dep_admin_edit_dialog_shape"
+        tools:ignore="ScrollViewSize">
 
-        <ImageView
-            android:id="@+id/dialogPoliceStationImg"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/pick_police_station" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dialogPoliceStationImg"
             android:layout_marginStart="10dp"
             android:layout_marginTop="30dp"
             android:text="@string/police_station_name"
@@ -42,36 +37,12 @@
             android:textCursorDrawable="@drawable/cursor_shape"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/dialogPoliceStationName"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/police_station_no"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/dialogPoliceStationNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/number"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:backgroundTint="@color/hint_clr"
-            android:hint="@string/police_station_no_hint"
-            android:textColor="@color/hint_clr"
-            android:textColorHint="@color/hint_clr"
-            android:textCursorDrawable="@drawable/cursor_shape"
-            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dialogPoliceStationNumber"
+            android:layout_below="@+id/dialogPoliceStationName"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:text="@string/police_station_location"
@@ -132,7 +103,7 @@
         <RelativeLayout
             android:id="@+id/boundaryDataLayout"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/boundaryLayout"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"

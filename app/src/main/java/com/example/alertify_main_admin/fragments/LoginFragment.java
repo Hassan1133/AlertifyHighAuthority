@@ -1,23 +1,14 @@
 package com.example.alertify_main_admin.fragments;
 
-import static android.content.Context.MODE_PRIVATE;
+import static com.example.alertify_main_admin.constants.Constants.ALERTIFY_HIGH_AUTHORITY_REF;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,13 +18,12 @@ import androidx.fragment.app.Fragment;
 import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.activities.MainActivity;
 import com.example.alertify_main_admin.databinding.LoginBinding;
-import com.example.alertify_main_admin.databinding.PoliceStationBinding;
+import com.example.alertify_main_admin.main_utils.AppSharedPreferences;
 import com.example.alertify_main_admin.main_utils.LoadingDialog;
 import com.example.alertify_main_admin.models.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -48,6 +38,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private DatabaseReference databaseReference;
     private LoginBinding binding;
 
+    private AppSharedPreferences appSharedPreferences;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,10 +53,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("AlertifyHighAuthority");
+        databaseReference = FirebaseDatabase.getInstance().getReference(ALERTIFY_HIGH_AUTHORITY_REF);
+        appSharedPreferences = new AppSharedPreferences(requireActivity());
 
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -127,12 +121,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 if (user != null) {
 
                     try {
-                        SharedPreferences userData = getContext().getApplicationContext().getSharedPreferences("profileData", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = userData.edit();
-                        editor.putString("userName", user.getName());
-                        editor.putString("userEmail", user.getEmail());
-                        editor.putString("userImgUrl", user.getImgUrl());
-                        editor.apply();
+                        appSharedPreferences.put("userProfileId", user.getId());
+                        appSharedPreferences.put("userProfileEmail", user.getEmail());
+                        appSharedPreferences.put("userProfileEmail", user.getEmail());
+
                     } catch (Exception e) {
                         System.out.println(e);
                     }
@@ -155,14 +147,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void goToMainActivity() {
-        SharedPreferences pref = getActivity().getSharedPreferences("login", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean("flag", true);
-        editor.apply();
+        appSharedPreferences.put("highAuthorityLoginFlag", true);
 
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
-        getActivity().finish();
+        requireActivity().finish();
     }
 
 }

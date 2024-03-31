@@ -5,6 +5,7 @@ import static com.example.alertify_main_admin.constants.Constants.PERMISSIONS_RE
 import static com.example.alertify_main_admin.constants.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,27 +29,21 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
 import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.fragments.ComplaintsFragment;
 import com.example.alertify_main_admin.fragments.DepAdminFragment;
 import com.example.alertify_main_admin.fragments.PoliceStationFragment;
+import com.example.alertify_main_admin.main_utils.AppSharedPreferences;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private View headerView;
-    private ImageView toolBarBtn;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private CircleImageView userImage;
     private TextView userName, userEmail;
 
     private boolean locationPermission = false;
@@ -56,19 +51,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Intent intent;
 
+    private AppSharedPreferences appSharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
 
         initialize(); // initialization method for initializing variables
-        navigationSelection(); // selection method for navigation items
-        bottomNavigationSelection();
-        checkMapServices();
-        getLocationPermission();
-        loadFragment(new ComplaintsFragment());
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -96,31 +89,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initialize() {
-        toolBarBtn = findViewById(R.id.tool_bar_menu);
+        ImageView toolBarBtn = findViewById(R.id.tool_bar_menu);
         toolBarBtn.setOnClickListener(this);
 
         drawer = findViewById(R.id.drawer);
         navigationView = findViewById(R.id.navigation);
-        headerView = navigationView.getHeaderView(0);
-        userImage = headerView.findViewById(R.id.circle_img);
+        View headerView = navigationView.getHeaderView(0);
         userName = headerView.findViewById(R.id.user_name);
         userEmail = headerView.findViewById(R.id.user_email);
         bottom_navigation = findViewById(R.id.bottom_navigation);
+        appSharedPreferences = new AppSharedPreferences(MainActivity.this);
 
+        loadFragment(new ComplaintsFragment());
         setProfileData();
+        navigationSelection(); // selection method for navigation items
+        bottomNavigationSelection();
+        checkMapServices();
+        getLocationPermission();
     }
 
     private void setProfileData() {
-        SharedPreferences userData = getSharedPreferences("profileData", MODE_PRIVATE);
-        userName.setText(userData.getString("userName", ""));
+        userName.setText(appSharedPreferences.getString("userProfileName"));
 
-        userEmail.setText(userData.getString("userEmail", ""));
-
-        Glide.with(getApplicationContext()).load(userData.getString("userImgUrl", "")).into(userImage);
+        userEmail.setText(appSharedPreferences.getString("userProfileEmail"));
     }
 
     private void navigationSelection() {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -128,15 +124,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     case R.id.logout:
 
-                        SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
-                        SharedPreferences.Editor logOutEditor = pref.edit();
-                        logOutEditor.putBoolean("flag", false);
-                        logOutEditor.apply();
+                        appSharedPreferences.put("highAuthorityLoginFlag", false);
 
-                        SharedPreferences userData = getSharedPreferences("profileData", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor profileDataEditor = userData.edit();
-                        profileDataEditor.clear();
-                        profileDataEditor.apply();
+                        appSharedPreferences.clear();
 
                         intent = new Intent(MainActivity.this, LoginSignupActivity.class);
                         startActivity(intent);
@@ -262,7 +252,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     locationPermission = true;
-                    Toast.makeText(this, "fragment no", Toast.LENGTH_SHORT).show();
                 }
             }
         }

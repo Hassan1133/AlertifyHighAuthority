@@ -13,18 +13,7 @@ public class PoliceStationModel implements Serializable {
     private double policeStationLatitude;
     private double policeStationLongitude;
 
-    private String policeStationNumber;
-    private String imgUrl;
-
     private List<LatLngWrapper> boundaries; // List of LatLng for boundaries
-
-    public String getPoliceStationNumber() {
-        return policeStationNumber;
-    }
-
-    public void setPoliceStationNumber(String policeStationNumber) {
-        this.policeStationNumber = policeStationNumber;
-    }
 
     public String getId() {
         return id;
@@ -64,14 +53,6 @@ public class PoliceStationModel implements Serializable {
 
     public void setPoliceStationLongitude(double policeStationLongitude) {
         this.policeStationLongitude = policeStationLongitude;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
     }
 
     public List<LatLngWrapper> getBoundaries() {

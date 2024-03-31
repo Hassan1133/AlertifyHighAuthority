@@ -22,4 +22,17 @@
     <string name="police_station_no_hint">enter police station number</string>
     <string name="title_activity_police_station_boundary_maps">PoliceStationBoundaryMapsActivity
     </string>
+    <string name="police_station_samanabad_faisalabad">Police Station Samanabad Faisalabad</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="high_authority_sign_up">High Authority Sign-up</string>
+    <string name="full_name">Full Name</string>
+    <string name="enter_your_name">enter your name</string>
+    <string name="please_enter_your_details">Please enter your details.</string>
+    <string name="email">Email</string>
+    <string name="example_gmail_com">example@gmail.com</string>
+    <string name="password">Password</string>
+    <string name="enter_at_least_6_words">enter at least 6 words</string>
+    <string name="signup">Signup</string>
+    <string name="alertify">ALERTIFY</string>
 </resources>

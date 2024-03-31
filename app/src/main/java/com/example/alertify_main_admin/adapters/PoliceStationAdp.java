@@ -1,6 +1,9 @@
 package com.example.alertify_main_admin.adapters;
 
 
+import static com.example.alertify_main_admin.constants.Constants.ALERTIFY_POLICE_STATIONS_REF;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -30,9 +33,9 @@ import java.util.List;
 public class PoliceStationAdp extends RecyclerView.Adapter<PoliceStationAdp.Holder> {
 
 
-    private Context context;
+    private final Context context;
 
-    private List<PoliceStationModel> policeStationsList;
+    private final List<PoliceStationModel> policeStationsList;
 
     public PoliceStationAdp(Context context, List<PoliceStationModel> policeStations) {
         this.context = context;
@@ -45,16 +48,14 @@ public class PoliceStationAdp extends RecyclerView.Adapter<PoliceStationAdp.Hold
 
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.police_station_recycler_design, parent, false);
-        Holder holder = new Holder(view);
 
-        return holder;
+        return new Holder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
 
         PoliceStationModel policeStation = policeStationsList.get(position);
-        Glide.with(context.getApplicationContext()).load(policeStation.getImgUrl()).into(holder.policeStationImg);
         holder.policeStationName.setText(policeStation.getPoliceStationName());
         holder.policeStationLocation.setText(policeStation.getPoliceStationLocation());
 
@@ -68,39 +69,22 @@ public class PoliceStationAdp extends RecyclerView.Adapter<PoliceStationAdp.Hold
         });
 
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onClick(View v) {
-                deleteImage(policeStation);
+                deleteData(policeStation);
                 notifyDataSetChanged();
             }
         });
 
     }
 
-    private void deleteImage(PoliceStationModel policeStation)
-    {
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        StorageReference storageReference = firebaseStorage.getReferenceFromUrl(policeStation.getImgUrl());
-        storageReference.delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        deleteData(policeStation);
-                    }
-                })
-               .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
     private void deleteData(PoliceStationModel policeStation) {
 
 
         FirebaseDatabase
                 .getInstance()
-                .getReference("AlertifyPoliceStations")
+                .getReference(ALERTIFY_POLICE_STATIONS_REF)
                 .child(policeStation.getId())
                 .removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -121,16 +105,15 @@ public class PoliceStationAdp extends RecyclerView.Adapter<PoliceStationAdp.Hold
         return policeStationsList.size();
     }
 
-    class Holder extends RecyclerView.ViewHolder {
-        private ShapeableImageView policeStationImg;
-        private TextView policeStationName, policeStationLocation;
+    class Holder extends RecyclerView.ViewHolder { ;
+        private final TextView policeStationName;
+        private final TextView policeStationLocation;
 
-        private Button editBtn, deleteBtn;
+        private final Button editBtn, deleteBtn;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
 
-            policeStationImg = itemView.findViewById(R.id.policeStationRecyclerImg);
             policeStationName = itemView.findViewById(R.id.policeStationRecyclerName);
             policeStationLocation = itemView.findViewById(R.id.policeStationRecyclerLocation);
             editBtn = itemView.findViewById(R.id.recyclerEditBtn);

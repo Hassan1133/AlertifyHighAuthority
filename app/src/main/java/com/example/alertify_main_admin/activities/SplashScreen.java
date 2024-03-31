@@ -1,18 +1,17 @@
 package com.example.alertify_main_admin.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
-
 import android.os.Bundle;
 import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
-import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.databinding.ActivitySplashScreenBinding;
+import com.example.alertify_main_admin.main_utils.AppSharedPreferences;
 
 
+@SuppressLint("CustomSplashScreen")
 public class SplashScreen extends AppCompatActivity {
 
     private ActivitySplashScreenBinding binding;
@@ -27,11 +26,13 @@ public class SplashScreen extends AppCompatActivity {
 
 
     private void goToNextActivity() {
+
+        AppSharedPreferences appSharedPreferences = new AppSharedPreferences(SplashScreen.this);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
-                boolean check = pref.getBoolean("flag", false);
+                boolean check = appSharedPreferences.getBoolean("highAuthorityLoginFlag");
                 Intent intent;
 
                 if (check) {

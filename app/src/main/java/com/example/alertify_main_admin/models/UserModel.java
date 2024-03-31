@@ -1,13 +1,30 @@
 package com.example.alertify_main_admin.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class UserModel implements Serializable {
     private String id;
     private String name;
     private String email;
-    private String imgUrl;
+    private List<String> policeStationList;
+    private List<String> depAdminList;
 
+    public List<String> getPoliceStationList() {
+        return policeStationList;
+    }
+
+    public void setPoliceStationList(List<String> policeStationList) {
+        this.policeStationList = policeStationList;
+    }
+
+    public List<String> getDepAdminList() {
+        return depAdminList;
+    }
+
+    public void setDepAdminList(List<String> depAdminList) {
+        this.depAdminList = depAdminList;
+    }
 
     public String getId() {
         return id;
@@ -33,11 +50,4 @@ public class UserModel implements Serializable {
         this.email = email;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
 }

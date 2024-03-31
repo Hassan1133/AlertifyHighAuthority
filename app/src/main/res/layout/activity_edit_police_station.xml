@@ -2,14 +2,17 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:background="@color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/app_color">
+        android:background="@color/app_color"
+        tools:ignore="ScrollViewSize">
 
         <TextView
             android:id="@+id/txt_alertify"
@@ -22,22 +25,11 @@
             android:textColor="@color/white"
             android:textSize="30sp" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/editPoliceStationImg"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_below="@+id/txt_alertify"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/dp"
-            android:translationZ="999dp" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/editPoliceStationImg"
-            android:layout_marginTop="-55dp"
+            android:layout_below="@+id/txt_alertify"
+            android:layout_marginTop="50dp"
             android:background="@drawable/login_signup_shape"
             android:paddingBottom="10dp">
 
@@ -46,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="50dp"
                 android:text="@string/police_station_name"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
@@ -67,36 +59,12 @@
 
                 />
 
-            <TextView
-                android:id="@+id/number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/editPoliceStationName"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/police_station_no"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/editPoliceStationNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/number"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:backgroundTint="@color/hint_clr"
-                android:hint="@string/police_station_no_hint"
-                android:textColor="@color/hint_clr"
-                android:textColorHint="@color/hint_clr"
-                android:textCursorDrawable="@drawable/cursor_shape"
-                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/editPoliceStationNumber"
+                android:layout_below="@+id/editPoliceStationName"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/police_station_location"
@@ -156,7 +124,7 @@
             <RelativeLayout
                 android:id="@+id/boundaryDataLayout"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/boundaryLayout"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
