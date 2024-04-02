@@ -4,13 +4,10 @@ import static com.example.alertify_main_admin.constants.Constants.ERROR_DIALOG_R
 import static com.example.alertify_main_admin.constants.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.example.alertify_main_admin.constants.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -64,10 +61,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tool_bar_menu:
-                startDrawer(); // start drawer method for open or close navigation drawer
-                break;
+        if (v.getId() == R.id.tool_bar_menu) {
+            startDrawer(); // start drawer method for open or close navigation drawer
         }
     }
 
@@ -158,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void bottomNavigationSelection() {
 
         bottom_navigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
@@ -185,13 +181,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private boolean checkMapServices() {
+    private void checkMapServices() {
         if (isServicesOK()) {
             if (isMapsEnabled()) {
-                return true;
             }
         }
-        return false;
     }
 
     private void buildAlertMessageNoGps() {
@@ -219,10 +213,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationPermission = true;
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
 
@@ -236,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             //an error occured but we can resolve it
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(this, available, ERROR_DIALOG_REQUEST);
+            assert dialog != null;
             dialog.show();
         } else {
             Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();

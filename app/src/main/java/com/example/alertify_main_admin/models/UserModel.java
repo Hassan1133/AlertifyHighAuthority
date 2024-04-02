@@ -9,6 +9,15 @@ public class UserModel implements Serializable {
     private String email;
     private List<String> policeStationList;
     private List<String> depAdminList;
+    private List<String> complaintList;
+
+    public List<String> getComplaintList() {
+        return complaintList;
+    }
+
+    public void setComplaintList(List<String> complaintList) {
+        this.complaintList = complaintList;
+    }
 
     public List<String> getPoliceStationList() {
         return policeStationList;

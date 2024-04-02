@@ -122,7 +122,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                     try {
                         appSharedPreferences.put("userProfileId", user.getId());
-                        appSharedPreferences.put("userProfileEmail", user.getEmail());
+                        appSharedPreferences.put("userProfileName", user.getName());
                         appSharedPreferences.put("userProfileEmail", user.getEmail());
 
                     } catch (Exception e) {

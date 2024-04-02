@@ -35,4 +35,9 @@
     <string name="enter_at_least_6_words">enter at least 6 words</string>
     <string name="signup">Signup</string>
     <string name="alertify">ALERTIFY</string>
+    <string name="name">Name :</string>
+    <string name="police_station">Police Station:</string>
+    <string name="email_">Email :</string>
+    <string name="name_simple">Name</string>
+    <string name="police_station_simple">Police Station</string>
 </resources>

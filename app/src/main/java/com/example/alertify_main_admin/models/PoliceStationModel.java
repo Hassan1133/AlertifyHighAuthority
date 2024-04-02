@@ -9,11 +9,39 @@ import java.util.List;
 public class PoliceStationModel implements Serializable {
     private String id;
     private String policeStationName;
+    private boolean isAssigned;
     private String policeStationLocation;
     private double policeStationLatitude;
     private double policeStationLongitude;
 
+    private String highAuthorityId;
+    private String depAdminId;
+
     private List<LatLngWrapper> boundaries; // List of LatLng for boundaries
+
+    public String getDepAdminId() {
+        return depAdminId;
+    }
+
+    public void setDepAdminId(String depAdminId) {
+        this.depAdminId = depAdminId;
+    }
+
+    public String getHighAuthorityId() {
+        return highAuthorityId;
+    }
+
+    public void setHighAuthorityId(String highAuthorityId) {
+        this.highAuthorityId = highAuthorityId;
+    }
+
+    public boolean isAssigned() {
+        return isAssigned;
+    }
+
+    public void setAssigned(boolean assigned) {
+        isAssigned = assigned;
+    }
 
     public String getId() {
         return id;

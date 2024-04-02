@@ -5,10 +5,7 @@ import java.io.Serializable;
 public class DepAdminModel implements Serializable {
 
     private String depAdminId;
-
     private String depAdminUid;
-    private String depAdminImageUrl;
-
     private String depAdminName;
 
     private String depAdminPoliceStation;
@@ -18,20 +15,22 @@ public class DepAdminModel implements Serializable {
 
     private String depAdminFCMToken;
 
+    private String highAuthorityId;
+
+    public String getHighAuthorityId() {
+        return highAuthorityId;
+    }
+
+    public void setHighAuthorityId(String highAuthorityId) {
+        this.highAuthorityId = highAuthorityId;
+    }
+
     public String getDepAdminId() {
         return depAdminId;
     }
 
     public void setDepAdminId(String depAdminId) {
         this.depAdminId = depAdminId;
-    }
-
-    public String getDepAdminImageUrl() {
-        return depAdminImageUrl;
-    }
-
-    public void setDepAdminImageUrl(String depAdminImageUrl) {
-        this.depAdminImageUrl = depAdminImageUrl;
     }
 
     public String getDepAdminName() {

@@ -8,4 +8,5 @@ public interface Constants {
 
     String ALERTIFY_POLICE_STATIONS_REF = "AlertifyPoliceStations";
     String ALERTIFY_HIGH_AUTHORITY_REF = "AlertifyHighAuthority";
+    String ALERTIFY_DEP_ADMIN_REF = "AlertifyDepAdmin";
 }

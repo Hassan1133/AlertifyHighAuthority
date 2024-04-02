@@ -22,9 +22,9 @@ import java.util.List;
 public class DepAdminAdp extends RecyclerView.Adapter<DepAdminAdp.Holder> {
 
 
-    private Context context;
+    private final Context context;
 
-    private List<DepAdminModel> depAdminsList;
+    private final List<DepAdminModel> depAdminsList;
 
     public DepAdminAdp(Context context, List<DepAdminModel> depAdmins) {
         this.context = context;
@@ -36,9 +36,8 @@ public class DepAdminAdp extends RecyclerView.Adapter<DepAdminAdp.Holder> {
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.dep_admin_recycler_design, parent, false);
-        DepAdminAdp.Holder holder = new DepAdminAdp.Holder(view);
 
-        return holder;
+        return new Holder(view);
     }
 
     @Override
@@ -47,12 +46,10 @@ public class DepAdminAdp extends RecyclerView.Adapter<DepAdminAdp.Holder> {
         DepAdminModel depAdminModel = depAdminsList.get(position);
 
         if (depAdminModel.getDepAdminStatus().equals("block")) {
-            Glide.with(context.getApplicationContext()).load(depAdminModel.getDepAdminImageUrl()).into(holder.depAdminImg);
             holder.depAdminName.setText(depAdminModel.getDepAdminName());
             holder.depAdminPoliceStation.setText(depAdminModel.getDepAdminPoliceStation());
             holder.blockBtn.setVisibility(View.VISIBLE);
         } else {
-            Glide.with(context.getApplicationContext()).load(depAdminModel.getDepAdminImageUrl()).into(holder.depAdminImg);
             holder.depAdminName.setText(depAdminModel.getDepAdminName());
             holder.depAdminPoliceStation.setText(depAdminModel.getDepAdminPoliceStation());
         }
@@ -73,15 +70,13 @@ public class DepAdminAdp extends RecyclerView.Adapter<DepAdminAdp.Holder> {
     }
 
     class Holder extends RecyclerView.ViewHolder {
+        private final TextView depAdminName;
+        private final TextView depAdminPoliceStation;
 
-        private ShapeableImageView depAdminImg;
-        private TextView depAdminName, depAdminPoliceStation;
-
-        private ImageView blockBtn;
+        private final ImageView blockBtn;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
-            depAdminImg = itemView.findViewById(R.id.dep_admin_img);
             depAdminName = itemView.findViewById(R.id.dep_admin_name);
             depAdminPoliceStation = itemView.findViewById(R.id.dep_admin_police_station);
             blockBtn = itemView.findViewById(R.id.block_icon);

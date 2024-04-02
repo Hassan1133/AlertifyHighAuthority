@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PoliceStationFragment extends Fragment implements View.OnClickListener {
 
@@ -71,8 +72,16 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = PoliceStationBinding.inflate(inflater, container, false);
-        init();
+        checkConnectivity();
         return binding.getRoot();
+    }
+
+    private void checkConnectivity() {
+        if (NetworkUtils.isInternetAvailable(requireActivity())) {
+            init();
+        } else {
+            Toast.makeText(requireActivity(), "Please turn on your internet", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void init() {
@@ -120,16 +129,14 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.addBtn:
-                if (NetworkUtils.isInternetAvailable(requireActivity())) {
-                    // Internet is available, call the method for creating dialog
-                    createDialog();
-                } else {
-                    // Internet is not available, show a message to the user
-                    Toast.makeText(getActivity(), "Check your internet connection", Toast.LENGTH_SHORT).show();
-                }
-                break;
+        if (v.getId() == R.id.addBtn) {
+            if (NetworkUtils.isInternetAvailable(requireActivity())) {
+                // Internet is available, call the method for creating dialog
+                createDialog();
+            } else {
+                // Internet is not available, show a message to the user
+                Toast.makeText(getActivity(), "Check your internet connection", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -172,6 +179,9 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
                     policeStation.setPoliceStationLatitude(selectedLatitude);
                     policeStation.setPoliceStationLongitude(selectedLongitude);
                     policeStation.setBoundaries(boundaryPoints);
+                    policeStation.setHighAuthorityId(appSharedPreferences.getString("userProfileId"));
+                    policeStation.setDepAdminId("");
+                    policeStation.setAssigned(false);
 
                     checkPoliceStationExists(policeStation);
                 }
@@ -255,13 +265,11 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<String> policeStationList = new ArrayList<>();
-                if (dataSnapshot.exists()) {
-
-                    policeStationList = (List<String>) dataSnapshot.getValue();
+                for (DataSnapshot snapshotData : dataSnapshot.getChildren()) {
+                    policeStationList.add(snapshotData.getValue(String.class));
                 }
 
                 // Check if the new policeStationId already exists in the list
-                assert policeStationList != null;
                 if (!policeStationList.contains(policeStationId)) {
                     // If it doesn't exist, add it to the list
                     policeStationList.add(policeStationId);
@@ -323,29 +331,53 @@ public class PoliceStationFragment extends Fragment implements View.OnClickListe
 
         LoadingDialog.showLoadingDialog(getActivity());
 
-        policeStationRef.addValueEventListener(new ValueEventListener() {
+        highAuthorityRef.child(appSharedPreferences.getString("userProfileId")).child("policeStationList").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                policeStations.clear();
-
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    policeStations.add(dataSnapshot.getValue(PoliceStationModel.class));
+                List<String> policeStationList = new ArrayList<>();
+                for (DataSnapshot snapshotData : snapshot.getChildren()) {
+                    policeStationList.add(snapshotData.getValue(String.class));
                 }
 
-                Collections.reverse(policeStations);
-
-                LoadingDialog.hideLoadingDialog();
-
-                setDataToRecycler(policeStations);
-
+                if (!policeStationList.isEmpty()) {
+                    getPoliceStationListData(policeStationList);
+                } else {
+                    LoadingDialog.hideLoadingDialog();
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+    }
+
+    private void getPoliceStationListData(List<String> policeStationList) {
+
+        policeStations.clear();
+
+        final AtomicInteger count = new AtomicInteger(policeStationList.size());
+
+        for (String policeStationId : policeStationList) {
+            policeStationRef.child(policeStationId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    policeStations.add(snapshot.getValue(PoliceStationModel.class));
+                    if (count.decrementAndGet() == 0) {
+                        Collections.reverse(policeStations);
+                        LoadingDialog.hideLoadingDialog();
+                        setDataToRecycler(policeStations);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(requireActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void setDataToRecycler(List<PoliceStationModel> policeStations) {

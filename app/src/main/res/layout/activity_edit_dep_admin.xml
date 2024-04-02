@@ -33,22 +33,12 @@
             android:textColor="@color/white"
             android:textSize="30sp" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/editDepAdminImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_below="@+id/txt_alertify"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/dp"
-            android:translationZ="999dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/editDepAdminImage"
-            android:layout_marginTop="-55dp"
+            android:layout_below="@+id/txt_alertify"
+            android:layout_marginTop="50dp"
             android:background="@drawable/login_signup_shape"
             android:backgroundTint="@color/white"
             android:paddingBottom="20dp">
@@ -59,7 +49,7 @@
                 android:layout_width="20sp"
                 android:layout_height="20sp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="50dp"
                 android:src="@drawable/user" />
 
             <TextView
@@ -67,9 +57,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="50dp"
                 android:layout_toEndOf="@+id/name_icon"
-                android:text="Name"
+                android:text="@string/name_simple"
                 android:textColor="@color/black"
                 android:textSize="17sp" />
 
@@ -122,7 +112,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_toEndOf="@+id/police_station_icon"
-                android:text="Police Station"
+                android:text="@string/police_station_simple"
                 android:textColor="@color/black"
                 android:textSize="17sp" />
 
@@ -175,7 +165,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_toEndOf="@+id/email_icon"
-                android:text="Email"
+                android:text="@string/email"
                 android:textColor="@color/black"
                 android:textSize="17sp" />
 

@@ -1,5 +1,9 @@
 package com.example.alertify_main_admin.activities;
 
+import static com.example.alertify_main_admin.constants.Constants.ALERTIFY_DEP_ADMIN_REF;
+import static com.example.alertify_main_admin.constants.Constants.ALERTIFY_POLICE_STATIONS_REF;
+
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -21,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.adapters.DropDownAdapter;
+import com.example.alertify_main_admin.constants.Constants;
 import com.example.alertify_main_admin.databinding.ActivityEditDepAdminBinding;
 import com.example.alertify_main_admin.databinding.DepAdminEditImgDialogBinding;
 import com.example.alertify_main_admin.databinding.DepAdminEditNameDialogBinding;
@@ -47,21 +52,10 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
 
     private ActivityEditDepAdminBinding binding;
     private DepAdminModel depAdminModel;
-    private String imageUrl;
-    private Dialog depAdminUpdateImgDialog, depAdminUpdateNameDialog, depAdminUpdatePoliceStationDialog;
-
-    private Uri imageUri;
-
-    private StorageReference firebaseStorageReference;
-
+    private Dialog depAdminUpdateNameDialog, depAdminUpdatePoliceStationDialog;
     private DatabaseReference depAdminRef, policeStationsRef;
-    private DropDownAdapter dropDownAdapter;
     private ArrayList<String> policeStationNameList;
-    private String imageSize;
     private DepAdminEditNameDialogBinding depAdminEditNameDialogBinding;
-
-    private DepAdminEditImgDialogBinding depAdminEditImgDialogBinding;
-
     private DepAdminEditPoliceStationDialogBinding depAdminEditPoliceStationDialogBinding;
 
     @Override
@@ -70,20 +64,15 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
         binding = ActivityEditDepAdminBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         init();
-        getIntentData();
     }
 
     private void init() {
 
-        binding.editDepAdminImage.setOnClickListener(this);
-
-        firebaseStorageReference = FirebaseStorage.getInstance().getReference();
-
-        depAdminRef = FirebaseDatabase.getInstance().getReference("AlertifyDepAdmin");
+        depAdminRef = FirebaseDatabase.getInstance().getReference(ALERTIFY_DEP_ADMIN_REF);
 
         binding.depAdminNameEditBtn.setOnClickListener(this);
 
-        policeStationsRef = FirebaseDatabase.getInstance().getReference("AlertifyPoliceStations");
+        policeStationsRef = FirebaseDatabase.getInstance().getReference(ALERTIFY_POLICE_STATIONS_REF);
         policeStationNameList = new ArrayList<>();
 
         binding.depAdminPoliceStationEditBtn.setOnClickListener(this);
@@ -94,12 +83,12 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
                 updateStatus(depAdminModel);
             }
         });
+
+        getIntentData();
     }
 
     private void getIntentData() {
         depAdminModel = (DepAdminModel) getIntent().getSerializableExtra("depAdminModel");
-        imageUrl = depAdminModel.getDepAdminImageUrl();
-        Glide.with(getApplicationContext()).load(imageUrl).into(binding.editDepAdminImage);
         binding.editDepAdminName.setText(depAdminModel.getDepAdminName());
         binding.editDepAdminPoliceStation.setText(depAdminModel.getDepAdminPoliceStation());
         binding.editDepAdminEmail.setText(depAdminModel.getDepAdminEmail());
@@ -110,155 +99,10 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void createDepAdminImageDialog() {
-        depAdminEditImgDialogBinding = DepAdminEditImgDialogBinding.inflate(LayoutInflater.from(this));
-        depAdminUpdateImgDialog = new Dialog(EditDepAdminActivity.this);
-        depAdminUpdateImgDialog.setContentView(depAdminEditImgDialogBinding.getRoot());
-        depAdminUpdateImgDialog.show();
-        depAdminUpdateImgDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        Glide.with(getApplicationContext()).load(imageUrl).into(depAdminEditImgDialogBinding.editDepAdminDialogImage);
-
-        depAdminEditImgDialogBinding.editDepAdminDialogImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pickNewImage();
-            }
-        });
-
-        depAdminEditImgDialogBinding.editDepAdminImgCloseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                depAdminUpdateImgDialog.dismiss();
-            }
-        });
-
-        depAdminEditImgDialogBinding.editDepAdminImgUpdateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoadingDialog.showLoadingDialog(EditDepAdminActivity.this);
-                if (imageUri == null) {
-                    updateImageUrlToDb(depAdminModel);
-                } else if (imageUri != null) {
-                    uploadImage();
-                }
-            }
-        });
-
-    }
-
-    private void uploadImage() {
-        StorageReference strRef = firebaseStorageReference.child("Alertify_Dep_Admin_Images/" + depAdminModel.getDepAdminId());
-
-        strRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                strRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-
-                        imageUrl = task.getResult().toString();
-                        depAdminModel.setDepAdminImageUrl(imageUrl);
-                        updateImageUrlToDb(depAdminModel);
-                    }
-
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                        Toast.makeText(EditDepAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(EditDepAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void updateImageUrlToDb(DepAdminModel depAdminModel) {
-
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("depAdminImageUrl", depAdminModel.getDepAdminImageUrl());
-
-        depAdminRef.child(depAdminModel.getDepAdminId()).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    LoadingDialog.hideLoadingDialog();
-                    Toast.makeText(EditDepAdminActivity.this, "Department Admin Image Updated Successfully!", Toast.LENGTH_SHORT).show();
-                    depAdminUpdateImgDialog.dismiss();
-
-                    Glide.with(getApplicationContext()).load(imageUrl).into(binding.editDepAdminImage);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(EditDepAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void pickNewImage() {
-        getContent.launch("image/*");
-    }
-
-    ActivityResultLauncher<String> getContent = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
-        @Override
-        public void onActivityResult(Uri uri) {
-            if (uri != null) {
-                if (isImageSizeValid(uri)) {
-                    imageUri = uri;
-                    depAdminEditImgDialogBinding.editDepAdminDialogImage.setImageURI(imageUri);
-                } else {
-                    Toast.makeText(EditDepAdminActivity.this, imageSize + ". Please select an image smaller than 2 MB", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    });
-
-    // Method to check if the selected image size is valid (less than 2MB)
-    private boolean isImageSizeValid(Uri imageUri) {
-        try {
-            // Get the image file size in bytes
-            long imageSizeInBytes = getImageSizeInBytes(imageUri);
-
-            // Convert the size to MB
-            double imageSizeInMB = imageSizeInBytes / (1024.0 * 1024.0);
-
-            imageSize = String.format("Selected image size is %.2f MB", imageSizeInMB);
-
-            // Compare with the 2MB limit
-            return imageSizeInMB < 2.0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // Method to get the image file size in bytes
-    private long getImageSizeInBytes(Uri imageUri) throws Exception {
-        Cursor cursor = getContentResolver().query(imageUri, null, null, null, null);
-        if (cursor == null) {
-            throw new Exception("Cursor is null");
-        }
-        cursor.moveToFirst();
-        long sizeInBytes = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE));
-        cursor.close();
-        return sizeInBytes;
-    }
-
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.editDepAdminImage:
-                createDepAdminImageDialog();
-                break;
             case R.id.depAdminNameEditBtn:
                 createDepAdminNameDialog();
                 break;
@@ -371,10 +215,10 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
         depAdminUpdatePoliceStationDialog.show();
         depAdminUpdatePoliceStationDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        fetchPoliceStationNameForDialogDropDown();
-        dropDownAdapter = new DropDownAdapter(EditDepAdminActivity.this, policeStationNameList);
-        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setAdapter(dropDownAdapter);
-        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setText(depAdminModel.getDepAdminPoliceStation());
+//        fetchPoliceStationNameForDialogDropDown();
+//        DropDownAdapter dropDownAdapter = new DropDownAdapter(EditDepAdminActivity.this, policeStationNameList);
+//        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setAdapter(dropDownAdapter);
+//        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setText(depAdminModel.getDepAdminPoliceStation());
 
         depAdminEditPoliceStationDialogBinding.editDepAdminCloseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
