@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:fillViewport="true"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/app_color"
-        >
+        tools:ignore="ScrollViewSize">
 
         <ImageView
             android:id="@+id/depAdminStatusIcon"
@@ -116,15 +118,6 @@
                 android:textColor="@color/black"
                 android:textSize="17sp" />
 
-            <ImageView
-                android:id="@+id/depAdminPoliceStationEditBtn"
-                android:layout_width="18sp"
-                android:layout_height="18sp"
-                android:layout_below="@+id/police_station"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
-                android:src="@drawable/pencil" />
 
             <TextView
                 android:id="@+id/editDepAdminPoliceStation"
@@ -133,8 +126,7 @@
                 android:layout_below="@+id/police_station"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
-                android:layout_toStartOf="@+id/depAdminPoliceStationEditBtn"
+                android:layout_marginEnd="40dp"
                 android:layout_toEndOf="@+id/police_station_icon"
                 android:textColor="#7C7B7B"
                 android:textSize="15sp" />

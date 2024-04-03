@@ -52,11 +52,9 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
 
     private ActivityEditDepAdminBinding binding;
     private DepAdminModel depAdminModel;
-    private Dialog depAdminUpdateNameDialog, depAdminUpdatePoliceStationDialog;
-    private DatabaseReference depAdminRef, policeStationsRef;
-    private ArrayList<String> policeStationNameList;
+    private Dialog depAdminUpdateNameDialog;
+    private DatabaseReference depAdminRef;
     private DepAdminEditNameDialogBinding depAdminEditNameDialogBinding;
-    private DepAdminEditPoliceStationDialogBinding depAdminEditPoliceStationDialogBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +69,6 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
         depAdminRef = FirebaseDatabase.getInstance().getReference(ALERTIFY_DEP_ADMIN_REF);
 
         binding.depAdminNameEditBtn.setOnClickListener(this);
-
-        policeStationsRef = FirebaseDatabase.getInstance().getReference(ALERTIFY_POLICE_STATIONS_REF);
-        policeStationNameList = new ArrayList<>();
-
-        binding.depAdminPoliceStationEditBtn.setOnClickListener(this);
 
         binding.depAdminStatusIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,13 +95,8 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.depAdminNameEditBtn:
-                createDepAdminNameDialog();
-                break;
-            case R.id.depAdminPoliceStationEditBtn:
-                createDepAdminPoliceStationDialog();
-                break;
+        if (v.getId() == R.id.depAdminNameEditBtn) {
+            createDepAdminNameDialog();
         }
     }
     private void createDepAdminNameDialog() {
@@ -163,126 +151,6 @@ public class EditDepAdminActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(EditDepAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void policeAlreadyAssignedOrNot(DepAdminModel depAdmin) {
-        depAdminRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            int count = 0;
-            boolean check = false;
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot depAdminSnapshot : snapshot.getChildren()) {
-
-                    DepAdminModel dep = depAdminSnapshot.getValue(DepAdminModel.class);
-
-                    count++;
-
-                    if (dep.getDepAdminPoliceStation().equalsIgnoreCase(depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.getText().toString())) {
-                        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setText("");
-                        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setError("Police Station already assigned. Please choose a different one");
-                        Toast.makeText(EditDepAdminActivity.this, "Police Station already assigned. Please choose a different one", Toast.LENGTH_SHORT).show();
-                        LoadingDialog.hideLoadingDialog();
-                        check = true;
-                        return;
-                    } else if (count == snapshot.getChildrenCount()) {
-                        if (!check) {
-                            if (depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.length() == 0) {
-                                LoadingDialog.hideLoadingDialog();
-                                depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setError("Please enter valid name");
-                            } else {
-                                updatePoliceStationToDb(depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.getText().toString());
-                            }
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void createDepAdminPoliceStationDialog() {
-        depAdminEditPoliceStationDialogBinding = DepAdminEditPoliceStationDialogBinding.inflate(LayoutInflater.from(this));
-        depAdminUpdatePoliceStationDialog = new Dialog(EditDepAdminActivity.this);
-        depAdminUpdatePoliceStationDialog.setContentView(depAdminEditPoliceStationDialogBinding.getRoot());
-        depAdminUpdatePoliceStationDialog.show();
-        depAdminUpdatePoliceStationDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-//        fetchPoliceStationNameForDialogDropDown();
-//        DropDownAdapter dropDownAdapter = new DropDownAdapter(EditDepAdminActivity.this, policeStationNameList);
-//        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setAdapter(dropDownAdapter);
-//        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStation.setText(depAdminModel.getDepAdminPoliceStation());
-
-        depAdminEditPoliceStationDialogBinding.editDepAdminCloseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                depAdminUpdatePoliceStationDialog.dismiss();
-            }
-        });
-
-        depAdminEditPoliceStationDialogBinding.editDepAdminPoliceStationDialogUpdateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoadingDialog.showLoadingDialog(EditDepAdminActivity.this);
-                policeAlreadyAssignedOrNot(depAdminModel);
-            }
-        });
-    }
-
-    private void updatePoliceStationToDb(String policeStation) {
-        depAdminModel.setDepAdminPoliceStation(policeStation);
-
-        HashMap<String, Object> map = new HashMap<>();
-
-        map.put("depAdminPoliceStation", depAdminModel.getDepAdminPoliceStation());
-
-        depAdminRef.child(depAdminModel.getDepAdminId()).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    LoadingDialog.hideLoadingDialog();
-                    Toast.makeText(EditDepAdminActivity.this, "Department Admin Police Station Updated Successfully!", Toast.LENGTH_SHORT).show();
-                    depAdminUpdatePoliceStationDialog.dismiss();
-
-                    binding.editDepAdminPoliceStation.setText(depAdminModel.getDepAdminPoliceStation());
-
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(EditDepAdminActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void fetchPoliceStationNameForDialogDropDown() {
-
-        policeStationsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                policeStationNameList.clear();
-
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                    PoliceStationModel ps = dataSnapshot.getValue(PoliceStationModel.class);
-
-                    policeStationNameList.add(ps.getPoliceStationName());
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(EditDepAdminActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
