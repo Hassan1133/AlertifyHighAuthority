@@ -7,10 +7,8 @@ public class DepAdminModel implements Serializable {
     private String depAdminId;
     private String depAdminUid;
     private String depAdminName;
-
     private String depAdminPoliceStation;
     private String depAdminEmail;
-
     private String depAdminStatus;
 
     private String depAdminFCMToken;

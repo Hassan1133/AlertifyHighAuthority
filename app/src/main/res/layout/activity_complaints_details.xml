@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:paddingBottom="20dp"
+        tools:ignore="ScrollViewSize">
+
+
+        <TextView
+            android:id="@+id/crime_evidence_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/evidence"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+
+        <Button
+            android:id="@+id/downloadEvidenceBtn"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crime_evidence_heading"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/app_color"
+            android:text="@string/download"
+            android:textAllCaps="false"
+            app:icon="@drawable/download" />
+
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/crime_evidence_underline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/downloadEvidenceBtn"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/userNameHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/crime_evidence_underline"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/user_name"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userNameHeading"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/hint_color"
+            android:textSize="15sp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/userNameUnderline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userName"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/userEmailHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/userNameUnderline"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="User Email"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/userEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userEmailHeading"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/hint_color"
+            android:textSize="15sp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/userEmailUnderline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userEmail"
+            android:layout_marginTop="20dp" />
+
+
+        <TextView
+            android:id="@+id/phoneHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userEmailUnderline"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/user_phone_no"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/userPhoneNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/phoneHeading"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/hint_color"
+            android:textSize="15sp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/userPhoneUnderline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userPhoneNo"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/cnicHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userPhoneUnderline"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/user_cnic"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/userCnicNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cnicHeading"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/hint_color"
+            android:textSize="15sp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/cnicUnderline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userCnicNo"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/crime_type_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cnicUnderline"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/crime_type"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/detailsCrimeType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crime_type_heading"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/hint_color"
+            android:textSize="15sp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/crime_type_underline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detailsCrimeType"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/crime_details_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crime_type_underline"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/crime_details"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/detailsCrime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crime_details_heading"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/hint_color"
+            android:textSize="15sp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/crime_details_underline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detailsCrime"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/crime_Location_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crime_details_underline"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/crime_location"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/detailsCrimeLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crime_Location_heading"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/hint_color"
+            android:textSize="15sp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/crime_location_underline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detailsCrimeLocation"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/crime_date_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crime_location_underline"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/crime_datetime"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/detailsCrimeDateTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crime_date_heading"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/hint_color"
+            android:textSize="15sp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/crime_date_time_underline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detailsCrimeDateTime"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/complaint_investigation_status_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crime_date_time_underline"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/investigation_status"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/complaintInvestigationStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/complaint_investigation_status_heading"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/hint_color"
+            android:textSize="15sp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/complaint_investigation_status_underline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/complaintInvestigationStatus"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/complaint_feedback_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/complaint_investigation_status_underline"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/feedback"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/complaintFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/complaint_feedback_heading"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/hint_color"
+            android:textSize="15sp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/complaint_feedback_underline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/complaintFeedback"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/complaint_police_station_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/complaint_feedback_underline"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/complaint_police_station"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/detailsComplaintPoliceStation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/complaint_police_station_heading"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/hint_color"
+            android:textSize="15sp" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/complaint_police_station_underline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detailsComplaintPoliceStation"
+            android:layout_marginTop="20dp" />
+
+
+        <TextView
+            android:id="@+id/complaint_date_time_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/complaint_police_station_underline"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/complaint_datetime"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/detailsComplaintDateTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/complaint_date_time_heading"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/hint_color"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+</ScrollView>

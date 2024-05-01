@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".fragments.AnalyticsFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="ScrollViewSize">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/selectDepAdminLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:textColorHint="@color/hint_color"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="6dp"
+            app:boxCornerRadiusBottomStart="6dp"
+            app:boxCornerRadiusTopEnd="6dp"
+            app:boxCornerRadiusTopStart="6dp"
+            app:boxStrokeColor="@color/hint_color"
+            app:boxStrokeWidthFocused="1dp"
+            app:endIconTint="@color/hint_color"
+            app:hintEnabled="false"
+            app:hintTextColor="@color/hint_color">
+
+            <AutoCompleteTextView
+                android:id="@+id/selectDepAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/select_department_admin"
+                android:inputType="none"
+                android:textColor="@color/hint_color"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/statusDropDownLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_below="@+id/selectDepAdminLayout"
+            android:textColorHint="@color/hint_color"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="6dp"
+            app:boxCornerRadiusBottomStart="6dp"
+            app:boxCornerRadiusTopEnd="6dp"
+            app:boxCornerRadiusTopStart="6dp"
+            app:boxStrokeColor="@color/hint_color"
+            app:boxStrokeWidthFocused="1dp"
+            app:endIconTint="@color/hint_color"
+            app:hintEnabled="false"
+            app:hintTextColor="@color/hint_color">
+
+            <AutoCompleteTextView
+                android:id="@+id/status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/select_complaint_investigation_status"
+                android:inputType="none"
+                android:textColor="@color/hint_color"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/calenderDropDownLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/statusDropDownLayout"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:textColorHint="@color/hint_color"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="6dp"
+            app:boxCornerRadiusBottomStart="6dp"
+            app:boxCornerRadiusTopEnd="6dp"
+            app:boxCornerRadiusTopStart="6dp"
+            app:boxStrokeColor="@color/hint_color"
+            app:boxStrokeWidthFocused="1dp"
+            app:endIconTint="@color/hint_color"
+            app:hintEnabled="false"
+            app:hintTextColor="@color/hint_color">
+
+            <AutoCompleteTextView
+                android:id="@+id/calender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/calender_type"
+                android:inputType="none"
+                android:textColor="@color/hint_color"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dateLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_below="@+id/calenderDropDownLayout"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            app:hintEnabled="false"
+            android:enabled="false"
+            app:hintTextColor="@color/hint_color">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_txt_bg"
+                android:hint="@string/date"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint_color"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/seeAnalyticsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:layout_below="@id/dateLayout"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="20dp"
+            android:backgroundTint="@color/app_color"
+            android:text="@string/see_analytics"
+            android:textAllCaps="false"
+            app:icon="@drawable/analytics"
+            android:textColor="@color/white"
+            app:cornerRadius="6dp" />
+
+    </RelativeLayout>
+</ScrollView>

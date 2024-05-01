@@ -16,4 +16,5 @@
     <color name="hint_clr">#676767</color>
     <color name="material_txt_field_bg_clr">#DCDCDC</color>
     <color name="txt_field_txt_clr">#FF000000</color>
+    <color name="hint_color">#7A7A7A</color>
 </resources>

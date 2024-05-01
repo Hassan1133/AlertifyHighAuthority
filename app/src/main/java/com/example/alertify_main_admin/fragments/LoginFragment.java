@@ -20,7 +20,7 @@ import com.example.alertify_main_admin.activities.MainActivity;
 import com.example.alertify_main_admin.databinding.LoginBinding;
 import com.example.alertify_main_admin.main_utils.AppSharedPreferences;
 import com.example.alertify_main_admin.main_utils.LoadingDialog;
-import com.example.alertify_main_admin.models.UserModel;
+import com.example.alertify_main_admin.models.HighAuthorityModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -32,12 +32,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.HashMap;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
     private LoginBinding binding;
-
     private AppSharedPreferences appSharedPreferences;
 
     @Nullable
@@ -76,7 +78,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-
                     getProfileData();
                 }
             }
@@ -116,22 +117,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                UserModel user = snapshot.getValue(UserModel.class);
+                HighAuthorityModel user = snapshot.getValue(HighAuthorityModel.class);
 
                 if (user != null) {
 
                     try {
-                        appSharedPreferences.put("userProfileId", user.getId());
-                        appSharedPreferences.put("userProfileName", user.getName());
-                        appSharedPreferences.put("userProfileEmail", user.getEmail());
+                        getFCMToken(user);
 
                     } catch (Exception e) {
                         System.out.println(e);
                     }
-
-                    LoadingDialog.hideLoadingDialog();
-                    Toast.makeText(getContext(), "Logged in Successfully", Toast.LENGTH_SHORT).show();
-                    goToMainActivity();
 
                 }
             }
@@ -146,9 +141,46 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    private void goToMainActivity() {
-        appSharedPreferences.put("highAuthorityLoginFlag", true);
+    private void getFCMToken(HighAuthorityModel user) {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (task.isSuccessful()) {
+                    setFCMTokenToDb(task.getResult(), user);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
+    private void setFCMTokenToDb(String token, HighAuthorityModel user) {
+        user.setHighAuthorityFCMToken(token);
+
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("highAuthorityFCMToken", user.getHighAuthorityFCMToken());
+
+        databaseReference.child(user.getId()).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    goToMainActivity(user);
+                }
+            }
+        });
+    }
+
+    private void goToMainActivity(HighAuthorityModel user) {
+        appSharedPreferences.put("userProfileId", user.getId());
+        appSharedPreferences.put("userProfileName", user.getName());
+        appSharedPreferences.put("userProfileEmail", user.getEmail());
+        appSharedPreferences.put("highAuthorityLoginFlag", true);
+        LoadingDialog.hideLoadingDialog();
+        Toast.makeText(getActivity(), "Logged in Successfully", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
         requireActivity().finish();

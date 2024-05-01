@@ -17,7 +17,7 @@ import com.example.alertify_main_admin.R;
 import com.example.alertify_main_admin.activities.LoginSignupActivity;
 import com.example.alertify_main_admin.databinding.SignupBinding;
 import com.example.alertify_main_admin.main_utils.LoadingDialog;
-import com.example.alertify_main_admin.models.UserModel;
+import com.example.alertify_main_admin.models.HighAuthorityModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 public class SignupFragment extends Fragment implements View.OnClickListener {
 
-    private UserModel user;
+    private HighAuthorityModel user;
 
     private FirebaseAuth firebaseAuth;
 
@@ -66,11 +66,12 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
     {
         if (isValid()) {
             LoadingDialog.showLoadingDialog(getActivity());
-            user = new UserModel();
+            user = new HighAuthorityModel();
             user.setName(binding.name.getText().toString().trim());
             user.setEmail(binding.email.getText().toString().trim());
             user.setDepAdminList(new ArrayList<>());
             user.setPoliceStationList(new ArrayList<>());
+            user.setHighAuthorityFCMToken("");
 
             firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), binding.password.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -92,7 +93,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    private void addToDB(@NonNull UserModel user) // method for add data to the database
+    private void addToDB(@NonNull HighAuthorityModel user) // method for add data to the database
     {
         firebaseDatabaseReference.child(user.getId()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

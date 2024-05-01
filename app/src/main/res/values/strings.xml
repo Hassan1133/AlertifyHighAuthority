@@ -1,4 +1,18 @@
 <resources>
+
+    <string-array name="status_array">
+        <item>All</item>
+        <item>Pending</item>
+        <item>In Process</item>
+        <item>Resolved</item>
+    </string-array>
+
+    <string-array name="calender_type">
+        <item>Date</item>
+        <item>Month</item>
+        <item>Year</item>
+    </string-array>
+
     <string name="app_name">Alertify</string>
     <string name="alertify_heading">ALERTIFY</string>
     <string name="title_activity_maps">MapsActivity</string>
@@ -40,4 +54,28 @@
     <string name="email_">Email :</string>
     <string name="name_simple">Name</string>
     <string name="police_station_simple">Police Station</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="see_analytics">See Analytics</string>
+    <string name="date">Date</string>
+    <string name="calender_type">Calender Type</string>
+    <string name="select_complaint_investigation_status">Select Complaint Investigation Status</string>
+    <string name="select_department_admin">Select Department Admin</string>
+    <string name="police_stations">Police Stations</string>
+    <string name="department_admins">Department Admins</string>
+    <string name="complaints">Complaints</string>
+    <string name="analytics">Analytics</string>
+    <string name="evidence">Evidence</string>
+    <string name="download">Download</string>
+    <string name="crime_details">Crime Details</string>
+    <string name="crime_location">Crime Location</string>
+    <string name="crime_datetime">Crime DateTime</string>
+    <string name="complaint_police_station">Complaint Police Station</string>
+    <string name="complaint_datetime">Complaint DateTime</string>
+    <string name="investigation_status">Investigation Status</string>
+    <string name="user_name">User Name</string>
+    <string name="user_phone_no">User Phone No</string>
+    <string name="user_cnic">User CNIC</string>
+    <string name="crime_type">Crime Type</string>
+    <string name="feedback">Feedback</string>
 </resources>

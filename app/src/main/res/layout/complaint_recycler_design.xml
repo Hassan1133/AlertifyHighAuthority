@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    android:background="@color/white"
+    android:elevation="4dp"
+    app:cardCornerRadius="20dp"
+    app:cardUseCompatPadding="true"
+    android:focusable="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/complaint_card_style">
+
+        <TextView
+            android:id="@+id/complaint_date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:text="24 Aug 2023"
+            android:textColor="@color/hint_color"
+            android:textSize="13sp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/detail_btn"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            app:elevation="0dp"
+            app:fabCustomSize="22dp"
+            app:borderWidth="0dp"
+            android:backgroundTint="@color/white"
+            app:tint="@color/app_color"
+            android:src="@drawable/report_details" />
+
+        <TextView
+            android:id="@+id/crime_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/complaint_date_time"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:text="Crime Type"
+            android:textColor="@color/app_color"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/report_police_station"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/crime_type"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:text="report police station"
+            android:textColor="@color/hint_color"
+            android:textSize="12sp"
+            />
+
+
+        <TextView
+            android:id="@+id/report_investigation_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/report_police_station"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:text="status"
+            android:textSize="11sp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/investigation_status_bg"
+            android:padding="5dp"
+           />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

@@ -3,13 +3,22 @@ package com.example.alertify_main_admin.models;
 import java.io.Serializable;
 import java.util.List;
 
-public class UserModel implements Serializable {
+public class HighAuthorityModel implements Serializable {
     private String id;
     private String name;
     private String email;
     private List<String> policeStationList;
     private List<String> depAdminList;
     private List<String> complaintList;
+    private String highAuthorityFCMToken;
+
+    public String getHighAuthorityFCMToken() {
+        return highAuthorityFCMToken;
+    }
+
+    public void setHighAuthorityFCMToken(String highAuthorityFCMToken) {
+        this.highAuthorityFCMToken = highAuthorityFCMToken;
+    }
 
     public List<String> getComplaintList() {
         return complaintList;

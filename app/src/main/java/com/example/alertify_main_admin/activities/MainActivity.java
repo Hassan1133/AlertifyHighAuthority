@@ -27,6 +27,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.alertify_main_admin.R;
+import com.example.alertify_main_admin.fragments.AnalyticsFragment;
 import com.example.alertify_main_admin.fragments.ComplaintsFragment;
 import com.example.alertify_main_admin.fragments.DepAdminFragment;
 import com.example.alertify_main_admin.fragments.PoliceStationFragment;
@@ -168,6 +169,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             getLocationPermission();
                             loadFragment(new PoliceStationFragment());
                         }
+                        return true;
+                    case R.id.analytics:
+                        loadFragment(new AnalyticsFragment());
                         return true;
                 }
                 return false;
